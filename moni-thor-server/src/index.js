@@ -8,7 +8,7 @@ DeployDb.init().then(() => {
     console.log("db initialized");
     app.listen(port);
     app.use(bodyParser.json()); // for parsing application/json
-    app.route('/settings')
+    app.route('/api/settings')
         .get((req, res) => {
                 let data = DeployDb.getSettings().data;
                 if (data.length > 0) {
@@ -19,9 +19,22 @@ DeployDb.init().then(() => {
             }
         )
         .post((req, res) => {
-                console.log(req.body)
-                DeployDb.save(DeployDb.getSettings(), req.body);
-                res.send(DeployDb.getSettings().data[0]);
+        console.log(req.body)
+        console.log(req.body.serverHost ||
+            req.body.serviceToCall ||
+            req.body.serviceName);
+        console.log(req.body && (req.body.serverHost ||
+            req.body.serviceToCall ||
+            req.body.serviceName))
+
+                if(req.body && (req.body.serverHost ||
+                    req.body.serviceToCall ||
+                    req.body.serviceName)) {
+                    DeployDb.save(DeployDb.getSettings(), req.body);
+                    res.send(DeployDb.getSettings().data[0]);
+                }else{
+                    res.sendStatus(204);
+                }
             }
         )
     ;
