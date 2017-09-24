@@ -1,10 +1,16 @@
 //Thanks to Christophe Genin : https://github.com/cgenin/tomcat-deploy-web/blob/master/server/deploydb.js
+const LOGGER = require('./utils/logger');
+
 const DeployDB = function DeployDB() {
+
+    //Collections
     const settingsCollection = 'settings';
+    const serversCollection = 'servers';
+
     const loki = require('lokijs');
     const db = new loki('db/data.json');
     const createIfNotExist = function (name) {
-        console.log(`createIfNotExist : ${name}`);
+        LOGGER.debug(`createIfNotExist : ${name}`);
         if (!db.getCollection(name)) {
             db.addCollection(name);
             db.saveDatabase();
@@ -15,6 +21,7 @@ const DeployDB = function DeployDB() {
         return new Promise((success) => {
             db.loadDatabase({}, () => {
                 createIfNotExist(settingsCollection);
+                createIfNotExist(serversCollection);
                 success(db);
             });
         });
@@ -22,6 +29,9 @@ const DeployDB = function DeployDB() {
 
     this.getSettings = function () {
         return db.getCollection(settingsCollection);
+    };
+    this.getServers = function () {
+        return db.getCollection(serversCollection);
     };
 
     this.insert = function (collection, item) {

@@ -6,30 +6,29 @@
         <md-card>
           <form v-on:submit="onSubmit()" @submit.prevent="">
             <md-card-header class=" md-theme-default md-toolbar">
-              <div class="md-title">Ajouter un serveur</div>
+              <div class="md-title">Editer un serveur {{id}}</div>
             </md-card-header>
 
             <md-card-content>
 
               <md-input-container>
                 <label>Server host</label>
-                <md-input v-model="serverHost"></md-input>
+                <md-input v-model="server.serverHost"></md-input>
               </md-input-container>
 
               <md-input-container>
                 <label>Service name</label>
-                <md-input v-model="serviceName"></md-input>
+                <md-input v-model="server.serviceName"></md-input>
               </md-input-container>
 
               <md-input-container>
                 <label>Service to call</label>
-                <md-input v-model="serviceToCall"></md-input>
+                <md-input v-model="server.serviceToCall"></md-input>
               </md-input-container>
             </md-card-content>
             <md-card-actions>
-              <md-button class="md-fab md-mini" type="submit">
-                <md-icon>add</md-icon>
-                <md-tooltip md-direction="top">Ajouter</md-tooltip>
+              <md-button class="md-raised md-primary" type="submit">
+                <span>Sauvegarder</span>
               </md-button>
             </md-card-actions>
           </form>
@@ -47,32 +46,24 @@
   export default {
     components: {MdCardContent},
     name: 'add-server',
+    props : ['id'],
     data() {
       return {
-        serverHost: '',
-        serviceToCall: '',
-        serviceName: ''
+        server: {
+
+        }
       }
     },
     mounted() {
-      axios.get(`/api/settings`)
+      axios.get(`/api/servers/${this.id}`)
         .then((response) => {
-          this.serverHost = response.data.serverHost || '';
-          this.serviceToCall = response.data.serviceToCall || '';
-          this.serviceName = response.data.serviceName || '';
+          this.server = response.data;
         })
         .catch((error) => console.error(error));
     },
     methods: {
       onSubmit: function () {
-        console.log(this.serverHost);
-        console.log(this.serviceToCall);
-        console.log(this.serviceName);
-        axios.post(`/api/servers`, {
-          serverHost: this.serverHost,
-          serviceToCall: this.serviceToCall,
-          serviceName: this.serviceName
-        })
+        axios.post(`/api/servers`, this.server)
           .catch((error) => console.error(error))
           .then(() => this.$router.push('/'));
       }

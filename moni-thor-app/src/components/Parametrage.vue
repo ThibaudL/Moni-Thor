@@ -4,7 +4,7 @@
             <md-layout md-flex="20"></md-layout>
             <md-layout md-flex="60">
                 <md-card>
-                    <form v-on:submit="onSubmit()">
+                    <form v-on:submit="onSubmit()"  @submit.prevent="">
                         <md-card-header class=" md-theme-default  md-toolbar">
                             <div class="md-title">Valeurs par défaut</div>
                         </md-card-header>
@@ -64,12 +64,12 @@
         },
         methods: {
             onSubmit() {
-                console.log(this.settings);
                 axios.post(`/api/settings`, this.settings)
                 .then((response) => {
                     this.settings = response.data;
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => console.error(error))
+                .then(() => this.$router.push('/'));
             }
         }
     }

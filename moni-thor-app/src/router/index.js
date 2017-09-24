@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import List from '@/components/List'
 import AddServer from '@/components/AddServer'
 import Parametrage from '@/components/Parametrage'
+import Edit from '@/components/Edit'
 
 Vue.use(Router)
 
@@ -10,18 +11,24 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      name: 'list',
+      component: List
     },
     {
       path: '/add',
-      name: 'add-server',
+      name: 'add',
       component: AddServer
     },
     {
       path: '/settings',
       name: 'settings',
       component: Parametrage
+    },
+    {
+      path: '/edit/:id',
+      props: true,
+      name: 'edit',
+      component: Edit
     }
   ]
 })
