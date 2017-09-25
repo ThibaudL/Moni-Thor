@@ -2,8 +2,15 @@
     <div class="list">
         <md-whiteframe class="md-theme-default md-toolbar" style="height: 50px;">
             <span>
-                <h2>État des services</h2>
+                <h2>Services</h2>
             </span>
+            <md-button md-open="hover" md-direction="left"
+                           class="md-fab md-mini md-fab-bottom-right md-warn"
+                           style="top: 10px;"
+                           v-on:click="pingAll(services)">
+                <md-tooltip md-direction="top">Refresh</md-tooltip>
+                <md-icon>refresh</md-icon>
+            </md-button>
         </md-whiteframe>
         <md-whiteframe>
             <md-layout md-gutter>
@@ -14,7 +21,8 @@
                     </md-input-container>
                     <md-input-container>
                         <label for="server">Server</label>
-                        <md-select id="server" v-model="server" v-on:change="pingAll(services)">
+                        <md-select id="server" v-model="server" v-on:change="serverChanged()">
+                            <md-option value="http://intranettestinfo4/">intranet test info 4</md-option>
                             <md-option value="http://intranettestinfo7/">intranet test info 7</md-option>
                             <md-option value="http://intranettestinfo8/">intranet test info 8</md-option>
                         </md-select>
@@ -24,7 +32,10 @@
             <md-speed-dial md-open="hover" md-direction="left"
                            class="md-fab-bottom-right "
                            style="top: 20px;">
-                <md-button class="md-fab md-warn md-mini" md-fab-trigger>
+                <md-button class="md-fab md-warn md-mini" md-fab-trigger
+                           v-on:click="filterResponding = null"
+                >
+                    <md-tooltip md-direction="top">Connection filter</md-tooltip>
                     <md-icon md-icon-morph>close</md-icon>
                     <md-icon>filter_list</md-icon>
                 </md-button>
@@ -32,12 +43,14 @@
                 <md-button class="md-fab md-mini md-clean"
                            v-on:click="filterResponding = false"
                            v-bind:class="{'md-warn' : filterResponding === false}">
+                    <md-tooltip md-direction="top">Offline</md-tooltip>
                     <md-icon class="red">portable_wifi_off</md-icon>
                 </md-button>
 
                 <md-button class="md-fab md-mini md-clean"
                            v-on:click="filterResponding =true"
                            v-bind:class="{'md-warn' : filterResponding === true}">
+                    <md-tooltip md-direction="top">Online</md-tooltip>
                     <md-icon class="green">graphic_eq</md-icon>
                 </md-button>
             </md-speed-dial>
@@ -51,7 +64,7 @@
                     </label>
                     <span style="flex: 1 1 0%;"></span>
                     <span>
-            <span v-if="service.time">{{service.time}} ms</span>
+            <span v-if="service.responding && service.time">{{service.time}} ms</span>
             <span>
               <md-icon v-if="!service.pending && service.responding" class="green">graphic_eq</md-icon>
               <md-icon v-if="!service.pending && !service.responding" class="red">portable_wifi_off</md-icon>
@@ -94,9 +107,15 @@
             getUrl(service) {
                 return (this.server || '') + (service.serviceName || '') + (service.serviceToCall || '');
             },
-            async pingAll(services) {
+            clearFilters(){
                 this.filterResponding = null;
                 this.filter = '';
+            },
+            serverChanged(){
+              this.clearFilters();
+              this.pingAll(this.services);
+            },
+            async pingAll(services) {
                 if (services && services.length > 0) {
                     for (const service of services) {
                         service.pending = true;
