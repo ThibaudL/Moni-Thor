@@ -30,6 +30,7 @@
                             <md-option value="http://intranettestinfo4/">intranet test info 4</md-option>
                             <md-option value="http://intranettestinfo7/">intranet test info 7</md-option>
                             <md-option value="http://intranettestinfo8/">intranet test info 8</md-option>
+                            <md-option value="http://intranetgrc/">intranet GRC</md-option>
                         </md-select>
                     </md-input-container>
                 </md-layout>
@@ -40,7 +41,7 @@
                 <md-button class="md-fab md-warn md-mini" md-fab-trigger
                            v-on:click="filterResponding = null"
                 >
-                    <md-tooltip md-direction="top">Connection filter</md-tooltip>
+                    <md-tooltip md-direction="top">Clear filter</md-tooltip>
                     <md-icon md-icon-morph>close</md-icon>
                     <md-icon>filter_list</md-icon>
                 </md-button>
