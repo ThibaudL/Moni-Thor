@@ -14,12 +14,16 @@
         </md-whiteframe>
         <md-whiteframe>
             <md-layout md-gutter>
-                <md-layout md-flex-xsmall="100" md-flex-large="15" md-row>
+                <md-layout md-flex-xsmall="100" md-flex-large="20" md-row>
                     <md-input-container>
                         <label>Filter</label>
                         <md-input v-model="filter"></md-input>
                     {{filteredServices.length}} results
                     </md-input-container>
+                </md-layout>
+                <md-layout md-flex-large="10" md-row>
+                </md-layout>
+                <md-layout md-flex-xsmall="100" md-flex-large="20" md-row>
                     <md-input-container>
                         <label for="server">Server</label>
                         <md-select id="server" v-model="server" v-on:change="serverChanged()">
@@ -29,7 +33,7 @@
                         </md-select>
                     </md-input-container>
                 </md-layout>
-            </md-layout>
+                </md-layout>
             <md-speed-dial md-open="hover" md-direction="left"
                            class="md-fab-bottom-right "
                            style="top: 20px;">
@@ -98,10 +102,13 @@
         },
         computed: {
             filteredServices() {
-                return this.services.filter((service) => {
-                    return ((this.filterResponding === null) || service.responding === this.filterResponding)
-                        && ((!this.filter) || this.getUrl(service).includes(this.filter))
-                });
+                if(this.services) {
+                    return this.services.filter((service) => {
+                        return ((this.filterResponding === null) || service.responding === this.filterResponding)
+                            && ((!this.filter) || this.getUrl(service).includes(this.filter))
+                    });
+                }
+                return [];
             }
         },
         methods: {
