@@ -8,7 +8,7 @@ module.exports = {
                     LOGGER.debug('received : ', 'GET', '/api/servers');
                     let data = DeployDb.getServers().data;
                     if (data.length > 0) {
-                        res.send(data);
+                        res.send(data[0]);
                     } else {
                         res.sendStatus(204);
                     }
@@ -16,10 +16,8 @@ module.exports = {
             )
             .post((req, res) => {
                     LOGGER.debug('received : ', 'POST', '/api/servers');
-                    if (req.body && (req.body.serverHost ||
-                            req.body.serviceToCall ||
-                            req.body.serviceName)) {
-                        DeployDb.save(DeployDb.getServers(), req.body);
+                    if (req.body) {
+                            DeployDb.save(DeployDb.getServers(), req.body);
                         res.send(DeployDb.getServers().data);
                     } else {
                         res.sendStatus(204);
@@ -27,33 +25,5 @@ module.exports = {
                 }
             )
         ;
-    app.route('/api/servers/:id').get((req,res) => {
-            LOGGER.debug('received : ', 'GET', '/api/servers/'+req.params.id);
-            let find = DeployDb.getServers().data.find(
-                (server) => {
-                    return ''+server.$loki === ''+req.params.id
-                }
-            );
-            if(find){
-                res.send(find);
-            }else{
-                res.sendStatus(204);
-            }
-        })
-        .delete((req, res) => {
-            LOGGER.debug('received : ', 'DELETE', '/api/servers/'+req.params.id);
-            let find = DeployDb.getServers().data.find(
-                (server) => {
-                    return ''+server.$loki === ''+req.params.id
-                }
-            );
-            if(find){
-                DeployDb.getServers().remove(find);
-                res.send(find);
-            }else{
-                res.sendStatus(204);
-            }
-        })
-
     }
 };

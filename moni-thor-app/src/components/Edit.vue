@@ -12,11 +12,6 @@
                             <md-card-content>
 
                                 <md-input-container>
-                                    <label>Server host</label>
-                                    <md-input v-model="server.serverHost"></md-input>
-                                </md-input-container>
-
-                                <md-input-container>
                                     <label>Service name</label>
                                     <md-input v-model="server.serviceName"></md-input>
                                 </md-input-container>

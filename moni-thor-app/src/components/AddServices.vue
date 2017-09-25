@@ -12,11 +12,6 @@
             <md-card-content>
 
               <md-input-container>
-                <label>Server host</label>
-                <md-input v-model="serverHost"></md-input>
-              </md-input-container>
-
-              <md-input-container>
                 <label>Service name</label>
                 <md-input v-model="serviceName"></md-input>
               </md-input-container>
@@ -49,7 +44,6 @@
     name: 'add-server',
     data() {
       return {
-        serverHost: '',
         serviceToCall: '',
         serviceName: ''
       }
@@ -57,7 +51,6 @@
     mounted() {
       axios.get(`/api/settings`)
         .then((response) => {
-          this.serverHost = response.data.serverHost || '';
           this.serviceToCall = response.data.serviceToCall || '';
           this.serviceName = response.data.serviceName || '';
         })
@@ -66,7 +59,6 @@
     methods: {
       onSubmit: function () {
         axios.post(`/api/services`, {
-          serverHost: this.serverHost,
           serviceToCall: this.serviceToCall,
           serviceName: this.serviceName
         })
