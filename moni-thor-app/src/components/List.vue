@@ -95,6 +95,8 @@
                 return (this.server || '') + (service.serviceName || '') + (service.serviceToCall || '');
             },
             async pingAll(services) {
+                this.filterResponding = null;
+                this.filter = '';
                 if (services && services.length > 0) {
                     for (const service of services) {
                         service.pending = true;
