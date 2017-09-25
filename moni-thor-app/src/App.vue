@@ -59,7 +59,12 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    margin: 15px;
+  }
+
+  .md-whiteframe {
+    background-color: #f7f7f7;
+    padding: 15px;
   }
 
   /*.md-fab {*/

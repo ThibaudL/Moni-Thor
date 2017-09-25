@@ -5,6 +5,7 @@ const DeployDb = require('./DeployDB');
 const bodyParser = require('body-parser');
 const settingsService = require('./services/settingsService');
 const serversService = require('./services/serversService');
+const servicesService = require('./services/servicesService');
 const LOGGER = require('./utils/logger');
 
 DeployDb.init().then(() => {
@@ -13,4 +14,5 @@ DeployDb.init().then(() => {
     app.use(bodyParser.json()); // for parsing application/json
     settingsService.registerService(app,DeployDb);
     serversService.registerService(app,DeployDb);
+    servicesService.registerService(app,DeployDb);
 });

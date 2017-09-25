@@ -2,11 +2,11 @@ const LOGGER = require('../utils/logger');
 
 module.exports = {
     registerService(app, DeployDb) {
-        LOGGER.info('registered : servers service');
-        app.route('/api/servers')
+        LOGGER.info('registered : services service');
+        app.route('/api/services')
             .get((req, res) => {
-                    LOGGER.debug('received : ', 'GET', '/api/servers');
-                    let data = DeployDb.getServers().data;
+                    LOGGER.debug('received : ', 'GET', '/api/services');
+                    let data = DeployDb.getServices().data;
                     if (data.length > 0) {
                         res.send(data);
                     } else {
@@ -15,21 +15,21 @@ module.exports = {
                 }
             )
             .post((req, res) => {
-                    LOGGER.debug('received : ', 'POST', '/api/servers');
+                    LOGGER.debug('received : ', 'POST', '/api/services');
                     if (req.body && (req.body.serverHost ||
                             req.body.serviceToCall ||
                             req.body.serviceName)) {
-                        DeployDb.save(DeployDb.getServers(), req.body);
-                        res.send(DeployDb.getServers().data);
+                        DeployDb.save(DeployDb.getServices(), req.body);
+                        res.send(DeployDb.getServices().data);
                     } else {
                         res.sendStatus(204);
                     }
                 }
             )
         ;
-    app.route('/api/servers/:id').get((req,res) => {
-            LOGGER.debug('received : ', 'GET', '/api/servers/'+req.params.id);
-            let find = DeployDb.getServers().data.find(
+    app.route('/api/services/:id').get((req,res) => {
+            LOGGER.debug('received : ', 'GET', '/api/services/'+req.params.id);
+            let find = DeployDb.getServices().data.find(
                 (server) => {
                     return ''+server.$loki === ''+req.params.id
                 }
@@ -41,14 +41,14 @@ module.exports = {
             }
         })
         .delete((req, res) => {
-            LOGGER.debug('received : ', 'DELETE', '/api/servers/'+req.params.id);
-            let find = DeployDb.getServers().data.find(
+            LOGGER.debug('received : ', 'DELETE', '/api/services/'+req.params.id);
+            let find = DeployDb.getServices().data.find(
                 (server) => {
                     return ''+server.$loki === ''+req.params.id
                 }
             );
             if(find){
-                DeployDb.getServers().remove(find);
+                DeployDb.getServices().remove(find);
                 res.send(find);
             }else{
                 res.sendStatus(204);

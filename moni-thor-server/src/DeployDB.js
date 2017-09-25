@@ -6,6 +6,7 @@ const DeployDB = function DeployDB() {
     //Collections
     const settingsCollection = 'settings';
     const serversCollection = 'servers';
+    const servicesCollection = 'services';
 
     const loki = require('lokijs');
     const db = new loki('db/data.json');
@@ -32,6 +33,9 @@ const DeployDB = function DeployDB() {
     };
     this.getServers = function () {
         return db.getCollection(serversCollection);
+    };
+    this.getServices = function () {
+        return db.getCollection(servicesCollection);
     };
 
     this.insert = function (collection, item) {

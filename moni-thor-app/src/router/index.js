@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import List from '@/components/List'
-import AddServer from '@/components/AddServer'
+import AddServices from '@/components/AddServices'
 import Parametrage from '@/components/Parametrage'
 import Edit from '@/components/Edit'
 
@@ -17,7 +17,7 @@ export default new Router({
     {
       path: '/add',
       name: 'add',
-      component: AddServer
+      component: AddServices
     },
     {
       path: '/settings',

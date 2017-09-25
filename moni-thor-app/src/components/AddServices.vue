@@ -6,7 +6,7 @@
         <md-card>
           <form v-on:submit="onSubmit()" @submit.prevent="">
             <md-card-header class=" md-theme-default md-toolbar">
-              <div class="md-title">Ajouter un serveur</div>
+              <div class="md-title">Ajouter un service</div>
             </md-card-header>
 
             <md-card-content>
@@ -65,7 +65,7 @@
     },
     methods: {
       onSubmit: function () {
-        axios.post(`/api/servers`, {
+        axios.post(`/api/services`, {
           serverHost: this.serverHost,
           serviceToCall: this.serviceToCall,
           serviceName: this.serviceName
