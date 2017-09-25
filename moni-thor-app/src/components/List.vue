@@ -18,6 +18,7 @@
                     <md-input-container>
                         <label>Filter</label>
                         <md-input v-model="filter"></md-input>
+                    {{filteredServices.length}} results
                     </md-input-container>
                     <md-input-container>
                         <label for="server">Server</label>
