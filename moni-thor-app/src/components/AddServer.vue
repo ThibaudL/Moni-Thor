@@ -65,9 +65,6 @@
     },
     methods: {
       onSubmit: function () {
-        console.log(this.serverHost);
-        console.log(this.serviceToCall);
-        console.log(this.serviceName);
         axios.post(`/api/servers`, {
           serverHost: this.serverHost,
           serviceToCall: this.serviceToCall,

@@ -8,12 +8,15 @@
         </label>
         <span style="flex: 1 1 0%;"></span>
         <span>
-          <md-icon v-if="!server.pending && server.responding" class="green">graphic_eq</md-icon>
-          <md-icon v-if="!server.pending && !server.responding" class="red">portable_wifi_off</md-icon>
-          <md-spinner :md-size="20" v-if="server.pending" md-indeterminate></md-spinner>
-          <router-link :to="{ name: 'edit', params: { id: server.$loki }}">
-            <md-icon>mode_edit</md-icon>
-          </router-link>
+          <span v-if="server.time">{{server.time}} ms</span>
+          <span>
+            <md-icon v-if="!server.pending && server.responding" class="green">graphic_eq</md-icon>
+            <md-icon v-if="!server.pending && !server.responding" class="red">portable_wifi_off</md-icon>
+            <md-spinner :md-size="20" v-if="server.pending" md-indeterminate></md-spinner>
+            <router-link :to="{ name: 'edit', params: { id: server.$loki }}">
+              <md-icon>mode_edit</md-icon>
+            </router-link>
+            </span>
           </span>
         <md-divider></md-divider>
       </md-list-item>
@@ -43,9 +46,12 @@
           this.servers = response.data;
           if (this.servers && this.servers.length > 0) {
             this.servers.forEach((server) => {
+              const start = new Date().getTime();
               server.pending = true;
               axios.get(this.getUrl(server))
                 .then(() => {
+                  const end = new Date().getTime();
+                  server.time = end - start;
                   server.responding = true;
                 })
                 .catch(() => {
