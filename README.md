@@ -1,4 +1,4 @@
-# Simple vue.js monitoring applciation to ping your services.
+# Simple vue.js monitoring application to ping your services.
 
 ## To do :
 
