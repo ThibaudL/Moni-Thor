@@ -30,13 +30,13 @@ module.exports = {
             )
         ;
 
-        app.route('/api/services/ping')
+        app.route('/api/services/ping/all')
             .get(async (req, res) => {
                 const server = req.query.server;
                 let token = await fetch(server+auth.url)
                     .then(response => response.text())
                     .then((token) => token);
-                LOGGER.debug('received : ', 'GET', '/api/services/ping?server='+server);
+                LOGGER.debug('received : ', 'GET', '/api/services/ping/all?server='+server);
                 let services = DeployDb.getServices().data;
                 if (services && services.length > 0) {
                     for (const service of services) {

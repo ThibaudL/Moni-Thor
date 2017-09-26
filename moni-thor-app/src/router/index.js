@@ -1,11 +1,12 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import List from '@/components/List'
-import AddServices from '@/components/AddServices'
-import Parametrage from '@/components/Parametrage'
-import Edit from '@/components/Edit'
+import Vue from 'vue';
+import Router from 'vue-router';
+import List from '@/components/List';
+import AddServices from '@/components/AddServices';
+import Parametrage from '@/components/Parametrage';
+import Edit from '@/components/Edit';
+import ServiceList from '@/components/ServiceList';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -13,6 +14,11 @@ export default new Router({
       path: '/',
       name: 'list',
       component: List
+    },
+    {
+      path: '/services',
+      name: 'services',
+      component: ServiceList
     },
     {
       path: '/add',

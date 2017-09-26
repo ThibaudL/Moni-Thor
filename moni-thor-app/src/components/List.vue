@@ -14,16 +14,16 @@
         </md-whiteframe>
         <md-whiteframe>
             <md-layout md-gutter>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-row>
+                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
                     <md-input-container>
                         <label>Filter</label>
                         <md-input v-model="filter"></md-input>
                         {{filteredServices.length}} results
                     </md-input-container>
                 </md-layout>
-                <md-layout md-flex-large="10" md-row>
+                <md-layout md-flex-large="10" md-flex-xlarge="20" md-row>
                 </md-layout>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-row>
+                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
                     <md-input-container>
                         <label for="server">Server</label>
                         <md-select id="server" v-model="server" v-on:change="serverChanged()">
@@ -138,7 +138,7 @@
             },
             pingAll() {
                 this.loading = true;
-                axios.get(`/api/services/ping?server=${this.server}`)
+                axios.get(`/api/services/ping/all?server=${this.server}`)
                     .then((response) => {
                         this.services = response.data;
                     })

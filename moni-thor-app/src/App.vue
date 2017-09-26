@@ -5,8 +5,12 @@
         <h1 class="md-title">Moni-Thor</h1>
         <span style="flex: 1 1 0%;"></span>
         <md-button v-on:click="go('/')" class="md-raised" v-bind:class="{ 'md-warn': isRoute('list') }">
-          <md-icon>list</md-icon>
+          <md-icon>view_list</md-icon>
           List
+        </md-button>
+        <md-button v-on:click="go('/services')" class="md-raised" v-bind:class="{ 'md-warn': isRoute('services') }">
+          <md-icon>featured_play_list</md-icon>
+          Services
         </md-button>
         <md-button v-on:click="go('/add')" class="md-raised " v-bind:class="{ 'md-warn': isRoute('add') }">
           <md-icon >add_circle</md-icon>
