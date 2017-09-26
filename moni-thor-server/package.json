@@ -4,14 +4,17 @@
   "description": "Server side for the Moni-Thor app",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node %NODE_DEBUG_OPTION% src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "debug": "^3.0.1",
     "express": "^4.15.5",
     "lokijs": "^1.5.0",
+    "node-fetch": "^1.7.3",
+    "request": "^2.82.0",
     "winston": "^2.3.1"
   }
 }
