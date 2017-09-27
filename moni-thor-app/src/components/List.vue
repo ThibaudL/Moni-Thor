@@ -73,7 +73,7 @@
                                v-if="service.responding && service.info.build"
                     >{{service.info.build.version}}
                         <md-tooltip md-direction="left">
-                            {{service.info.build | json}}
+                            {{service.info.build}}
                         </md-tooltip>
                     </md-button>
                     <span v-if="service.responding && service.responseTime">{{service.responseTime}} ms</span>

@@ -17,12 +17,9 @@
       </md-layout>
     </md-whiteframe>
     <md-whiteframe>
-      <div>
-        <md-progress md-indeterminate class="md-accent" v-if="loading"></md-progress>
-      </div>
-      <md-list v-if="!loading">
+      <md-list>
         <md-layout md-gutter style="background-color: #f7f7f7;">
-          <md-layout md-gutter v-for="service,idx in filteredServices" style="padding-bottom: 15px;">
+          <md-layout md-gutter v-for="service,idx in filteredServices" style="padding-bottom: 15px;padding-right: 15px;">
             <md-card>
               <md-card-header class=" md-theme-default md-toolbar">
                 <div class="md-title">{{service.serviceName}}</div>
@@ -31,28 +28,31 @@
                            style="margin: -7px;">
                   <md-icon>refresh</md-icon>
                 </md-button>
+                <div>
+                  <md-progress md-indeterminate class="md-accent" v-if="service.loading"></md-progress>
+                </div>
               </md-card-header>
-              <md-card-content>
+              <md-card-content v-if="!service.loading">
                 <md-list>
-                  <md-list-item v-for="server in serverWrapper.servers">
+                  <md-list-item v-for="server in service.servers">
                     <label>
-                      {{server}}
+                      {{server.host}}
                     </label>
                     <span style="flex: 1 1 0%;"></span>
                     <md-button class="md-raised md-accent"
-                               v-if="service.responding && service.info.build"
-                    >{{service.info.build.version}}
+                               v-if="server.responding && server.info.build"
+                    >{{server.info.build.version}}
                       <md-tooltip md-direction="left">
-                        {{service.info.build | json}}
+                        {{server.info.build}}
                       </md-tooltip>
                     </md-button>
-                    <span v-if="service.responding && service.responseTime">{{service.responseTime}} ms</span>
+                    <span v-if="server.responding && server.responseTime">{{server.responseTime}} ms</span>
                     <span>
                         <span>
-                          <md-icon v-if="!service.pending && service.responding === true" class="green">graphic_eq</md-icon>
-                          <md-icon v-if="!service.pending && service.responding === false"
-                                   class="red">portable_wifi_off</md-icon>
-                          <md-spinner :md-size="20" v-if="service.pending" md-indeterminate></md-spinner>
+                          <md-icon v-if="!server.pending && server.responding === true" class="green">graphic_eq</md-icon>
+                          <md-icon v-if="!server.pending && service.responding === false"
+                                   class="red">server</md-icon>
+                          <md-spinner :md-size="20" v-if="server.pending" md-indeterminate></md-spinner>
                         </span>
                     </span>
                   </md-list-item>
@@ -108,7 +108,18 @@
         this.filter = '';
       },
       pingService(service){
-
+          service.loading = true;
+          axios.get(`/api/services/ping?service=${service.serviceName}`)
+              .then((response) => {
+                  service.servers = response.data.servers;
+              })
+              .catch((error) => {
+                  console.error(error);
+              })
+              .then(() => {
+                  service.loading = false;
+                  this.$forceUpdate();
+              })
       }
     },
     mounted() {

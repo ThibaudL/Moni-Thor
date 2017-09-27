@@ -32,42 +32,39 @@ module.exports = {
 
         app.route('/api/services/ping')
             .get(async (req, res) => {
-                // DeployDb.getServers().
-                const service = req.query.service;
-                let token = await fetch(service+auth.url)
-                    .then(response => response.text())
-                    .then((token) => token);
-                LOGGER.debug('received : ', 'GET', '/api/services/ping/all?service='+service);
-                let services = DeployDb.getServices().data;
-                if (services && services.length > 0) {
-                    for (const service of services) {
-                        service.serverHost = service;
+                const serviceName = req.query.service;
+                LOGGER.debug('received : ', 'GET', '/api/services/ping/all?service=' + serviceName);
+                const service = DeployDb.getServices().data.find((service) => service.serviceName === serviceName);
+                service.servers = [];
+                if (DeployDb.getServers().data && DeployDb.getServers().data.length > 0) {
+                    const services = [];
+                    for (const server of DeployDb.getServers().data[0].servers) {
+                        let token = await fetch(server + auth.url)
+                            .then(response => response.text())
+                            .then((token) => token);
+                        const serverResult = {
+                          host : server
+                        };
                         const start = Date.now();
-                        await fetch(service + (service.serviceName || '') + (service.serviceToCall || ''), {headers : { 'x-auth-token' : token}})
+                        await fetch(server + (service.serviceName || '') + (service.serviceToCall || ''), {headers: {'x-auth-token': token}})
                             .then(response => response.json())
                             .then((info) => {
                                 if (!info) {
                                     throw 'Failed to reach';
                                 }
                                 const end = Date.now();
-                                LOGGER.info("Service is OK : ",service + (service.serviceName || '') + (service.serviceToCall || ''), end - start);
-                                service.responseTime = end - start;
-                                service.responding = true;
-                                service.info = info;
+                                LOGGER.info("Service is OK : ", server + (service.serviceName || '') + (service.serviceToCall || ''), end - start);
+                                serverResult.responseTime = end - start;
+                                serverResult.responding = true;
+                                serverResult.info = info;
                             })
                             .catch(() => {
-                                service.responding = false;
-                                LOGGER.info("Failed to reach : ", service + (service.serviceName || '') + (service.serviceToCall || ''))
+                                serverResult.responding = false;
+                                LOGGER.info("Failed to reach : ", server + (service.serviceName || '') + (service.serviceToCall || ''))
                             });
+                        service.servers.push(serverResult);
                     }
-                    DeployDb.save(DeployDb.getStats(),services.map((service) => {
-                        return {
-                            url : service + (service.serviceName || '') + (service.serviceToCall || ''),
-                            responseTime : service.responseTime,
-                            responding : service.responding
-                        }
-                    }));
-                    res.send(services);
+                    res.send(service);
                 } else {
                     res.sendStatus(204);
                 }
@@ -76,23 +73,23 @@ module.exports = {
         app.route('/api/services/ping/all')
             .get(async (req, res) => {
                 const server = req.query.server;
-                let token = await fetch(server+auth.url)
+                let token = await fetch(server + auth.url)
                     .then(response => response.text())
                     .then((token) => token);
-                LOGGER.debug('received : ', 'GET', '/api/services/ping/all?server='+server);
+                LOGGER.debug('received : ', 'GET', '/api/services/ping/all?server=' + server);
                 let services = DeployDb.getServices().data;
                 if (services && services.length > 0) {
                     for (const service of services) {
                         service.serverHost = server;
                         const start = Date.now();
-                        await fetch(server + (service.serviceName || '') + (service.serviceToCall || ''), {headers : { 'x-auth-token' : token}})
+                        await fetch(server + (service.serviceName || '') + (service.serviceToCall || ''), {headers: {'x-auth-token': token}})
                             .then(response => response.json())
                             .then((info) => {
                                 if (!info) {
                                     throw 'Failed to reach';
                                 }
                                 const end = Date.now();
-                                LOGGER.info("Service is OK : ",server + (service.serviceName || '') + (service.serviceToCall || ''), end - start);
+                                LOGGER.info("Service is OK : ", server + (service.serviceName || '') + (service.serviceToCall || ''), end - start);
                                 service.responseTime = end - start;
                                 service.responding = true;
                                 service.info = info;
@@ -102,11 +99,11 @@ module.exports = {
                                 LOGGER.info("Failed to reach : ", server + (service.serviceName || '') + (service.serviceToCall || ''))
                             });
                     }
-                    DeployDb.save(DeployDb.getStats(),services.map((service) => {
+                    DeployDb.save(DeployDb.getStats(), services.map((service) => {
                         return {
-                            url : server + (service.serviceName || '') + (service.serviceToCall || ''),
-                            responseTime : service.responseTime,
-                            responding : service.responding
+                            url: server + (service.serviceName || '') + (service.serviceToCall || ''),
+                            responseTime: service.responseTime,
+                            responding: service.responding
                         }
                     }));
                     res.send(services);
