@@ -22,15 +22,15 @@
       </div>
       <md-list v-if="!loading">
         <md-layout md-gutter style="background-color: #f7f7f7;">
-          <md-layout md-gutter v-for="service,idx in filteredServices">
+          <md-layout md-gutter v-for="service,idx in filteredServices" style="padding-bottom: 15px;">
             <md-card>
               <md-card-header class=" md-theme-default md-toolbar">
                 <div class="md-title">{{service.serviceName}}</div>
-                <router-link :to="{ name: 'edit', params: { id: service.$loki }}"
-                             class="md-fab md-mini md-fab-bottom-right md-warn">
-                  <md-icon>mode_edit</md-icon>
-                  <md-tooltip>Edit service data</md-tooltip>
-                </router-link>
+                <md-button class="md-fab md-mini md-fab-bottom-right md-warn"
+                           v-on:click="pingService(service)"
+                           style="margin: -7px;">
+                  <md-icon>refresh</md-icon>
+                </md-button>
               </md-card-header>
               <md-card-content>
                 <md-list>
@@ -49,8 +49,8 @@
                     <span v-if="service.responding && service.responseTime">{{service.responseTime}} ms</span>
                     <span>
                         <span>
-                          <md-icon v-if="!service.pending && service.responding" class="green">graphic_eq</md-icon>
-                          <md-icon v-if="!service.pending && !service.responding"
+                          <md-icon v-if="!service.pending && service.responding === true" class="green">graphic_eq</md-icon>
+                          <md-icon v-if="!service.pending && service.responding === false"
                                    class="red">portable_wifi_off</md-icon>
                           <md-spinner :md-size="20" v-if="service.pending" md-indeterminate></md-spinner>
                         </span>
@@ -107,9 +107,8 @@
         this.filterResponding = null;
         this.filter = '';
       },
-      serverChanged() {
-        this.clearFilters();
-        this.pingAll(this.services);
+      pingService(service){
+
       }
     },
     mounted() {

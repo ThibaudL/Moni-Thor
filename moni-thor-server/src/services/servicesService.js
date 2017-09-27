@@ -30,6 +30,49 @@ module.exports = {
             )
         ;
 
+        app.route('/api/services/ping')
+            .get(async (req, res) => {
+                // DeployDb.getServers().
+                const service = req.query.service;
+                let token = await fetch(service+auth.url)
+                    .then(response => response.text())
+                    .then((token) => token);
+                LOGGER.debug('received : ', 'GET', '/api/services/ping/all?service='+service);
+                let services = DeployDb.getServices().data;
+                if (services && services.length > 0) {
+                    for (const service of services) {
+                        service.serverHost = service;
+                        const start = Date.now();
+                        await fetch(service + (service.serviceName || '') + (service.serviceToCall || ''), {headers : { 'x-auth-token' : token}})
+                            .then(response => response.json())
+                            .then((info) => {
+                                if (!info) {
+                                    throw 'Failed to reach';
+                                }
+                                const end = Date.now();
+                                LOGGER.info("Service is OK : ",service + (service.serviceName || '') + (service.serviceToCall || ''), end - start);
+                                service.responseTime = end - start;
+                                service.responding = true;
+                                service.info = info;
+                            })
+                            .catch(() => {
+                                service.responding = false;
+                                LOGGER.info("Failed to reach : ", service + (service.serviceName || '') + (service.serviceToCall || ''))
+                            });
+                    }
+                    DeployDb.save(DeployDb.getStats(),services.map((service) => {
+                        return {
+                            url : service + (service.serviceName || '') + (service.serviceToCall || ''),
+                            responseTime : service.responseTime,
+                            responding : service.responding
+                        }
+                    }));
+                    res.send(services);
+                } else {
+                    res.sendStatus(204);
+                }
+            });
+
         app.route('/api/services/ping/all')
             .get(async (req, res) => {
                 const server = req.query.server;
