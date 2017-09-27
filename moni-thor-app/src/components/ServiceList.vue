@@ -19,21 +19,28 @@
     <md-whiteframe>
       <md-list>
         <md-layout md-gutter style="background-color: #f7f7f7;">
-          <md-layout md-gutter v-for="service,idx in filteredServices" style="padding-bottom: 15px;padding-right: 15px;">
-            <md-card>
+          <md-layout md-flex-xsmall="100"
+                     md-flex-small="50"
+                     md-flex-medium="50"
+                     md-flex-large="33"
+                     md-flex-xlarge="20"
+                     md-gutter v-for="service,idx in filteredServices" style="padding-bottom: 15px;padding-right: 15px;">
+            <md-card style="width: 100%;">
               <md-card-header class=" md-theme-default md-toolbar">
-                <div class="md-title">{{service.serviceName}}</div>
+                <div class="md-title">{{service.serviceName}}
+                </div>
+                <span style="position: absolute;right: 10px;top: 2px;">{{formatDate(service.meta.updated)}}</span>
                 <md-button class="md-fab md-mini md-fab-bottom-right md-warn"
                            v-on:click="pingService(service)"
-                           style="margin: -7px;">
+                           style="margin: -15px;">
                   <md-icon>refresh</md-icon>
                 </md-button>
-                <div>
+              </md-card-header>
+              <md-card-content >
+                <div style="padding-top: 20px;">
                   <md-progress md-indeterminate class="md-accent" v-if="service.loading"></md-progress>
                 </div>
-              </md-card-header>
-              <md-card-content v-if="!service.loading">
-                <md-list>
+                <md-list v-if="!service.loading">
                   <md-list-item v-for="server in service.servers">
                     <label>
                       {{server.host}}
@@ -46,12 +53,10 @@
                         {{server.info.build}}
                       </md-tooltip>
                     </md-button>
-                    <span v-if="server.responding && server.responseTime">{{server.responseTime}} ms</span>
                     <span>
                         <span>
-                          <md-icon v-if="!server.pending && server.responding === true" class="green">graphic_eq</md-icon>
-                          <md-icon v-if="!server.pending && service.responding === false"
-                                   class="red">server</md-icon>
+                          <md-icon v-if="server.responding" class="green">graphic_eq</md-icon>
+                          <md-icon v-if="!server.responding" class="red">portable_wifi_off</md-icon>
                           <md-spinner :md-size="20" v-if="server.pending" md-indeterminate></md-spinner>
                         </span>
                     </span>
@@ -100,6 +105,10 @@
       }
     },
     methods: {
+      formatDate(timestamp){
+          let date = new Date(timestamp);
+          return date.getDate() + '/' + (date.getMonth()+1) + '/'+ date.getFullYear() + ' '+ date.getHours()+':'+date.getMinutes();
+      },
       getUrl(service) {
         return (service.serverHost || '') + (service.serviceName || '') + (service.serviceToCall || '');
       },
@@ -109,9 +118,11 @@
       },
       pingService(service){
           service.loading = true;
+          this.$forceUpdate();
           axios.get(`/api/services/ping?service=${service.serviceName}`)
               .then((response) => {
                   service.servers = response.data.servers;
+                  service.meta = response.data.meta;
               })
               .catch((error) => {
                   console.error(error);

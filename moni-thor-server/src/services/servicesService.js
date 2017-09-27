@@ -64,6 +64,7 @@ module.exports = {
                             });
                         service.servers.push(serverResult);
                     }
+                    DeployDb.save(DeployDb.getServices(),service);
                     res.send(service);
                 } else {
                     res.sendStatus(204);
