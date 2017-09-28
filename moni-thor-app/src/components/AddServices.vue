@@ -2,7 +2,7 @@
   <div class="hello">
     <md-layout>
       <md-layout md-flex="20"></md-layout>
-      <md-layout md-flex="60">
+      <md-layout md-flex="20">
         <md-card>
           <form v-on:submit="onSubmit()" @submit.prevent="">
             <md-card-header class=" md-theme-default md-toolbar">
@@ -30,7 +30,8 @@
           </form>
         </md-card>
       </md-layout>
-      <md-layout md-flex="20"></md-layout>
+      <md-layout md-flex="60">
+      </md-layout>
     </md-layout>
   </div>
 </template>

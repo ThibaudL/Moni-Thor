@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const settingsService = require('./services/settingsService');
 const serversService = require('./services/serversService');
 const servicesService = require('./services/servicesService');
+const statsService = require('./services/statsService');
 const LOGGER = require('./utils/logger');
 
 DeployDb.init().then(() => {
@@ -15,4 +16,5 @@ DeployDb.init().then(() => {
     settingsService.registerService(app,DeployDb);
     serversService.registerService(app,DeployDb);
     servicesService.registerService(app,DeployDb);
+    statsService.registerService(app,DeployDb);
 });

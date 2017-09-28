@@ -46,7 +46,6 @@
     name: 'app',
     methods : {
       go(url){
-        console.log(this.$router);
         this.$router.push(url);
       },
       isRoute(route){
