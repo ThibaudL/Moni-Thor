@@ -14,6 +14,25 @@
                         {{filteredServices.length}} results
                     </md-input-container>
                 </md-layout>
+                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                </md-layout>
+                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                    <md-input-container>
+                        <label for="server">Server</label>
+                        <md-select id="server" v-model="serverFilter">
+                            <md-option :value="null"></md-option>
+                            <md-option v-for="server in serverWrapper.servers" :value="server">{{server}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </md-layout>
+                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                </md-layout>
+                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                    <md-button class="md-raised md-warn" v-on:click="serverFilter = null;filter = null;">
+                        Clear filters
+                        <md-icon>clear</md-icon>
+                    </md-button>
+                </md-layout>
             </md-layout>
         </md-whiteframe>
         <md-whiteframe>
@@ -32,8 +51,15 @@
                                 </div>
                                 <span style="position: absolute;right: 10px;top: 2px;">{{formatDate(service.meta.updated)}}</span>
                                 <md-button class="md-fab md-mini md-fab-bottom-right md-warn"
+                                           v-on:click="openService(service)"
+                                           style="margin: -15px;    right: 70px;">
+                                    <md-tooltip>Zoom</md-tooltip>
+                                    <md-icon>more_horiz</md-icon>
+                                </md-button>
+                                <md-button class="md-fab md-mini md-fab-bottom-right md-warn"
                                            v-on:click="pingService(service)"
                                            style="margin: -15px;">
+                                    <md-tooltip>Refresh data</md-tooltip>
                                     <md-icon>refresh</md-icon>
                                 </md-button>
                             </md-card-header>
@@ -53,20 +79,22 @@
                                         <md-button class="md-raised md-accent"
                                                    v-if="server.responding && server.info.build"
                                         >{{server.info.build.version}}
-                                            <md-tooltip md-direction="left">
-                                                {{server.info.build}}
-                                            </md-tooltip>
+                                            <md-tooltip>{{getCounter(server.metrics)}}</md-tooltip>
+                                        </md-button>
+                                        <md-button class=""
+                                                   v-if="server.responding && !server.info.build"
+                                        > No Version
                                         </md-button>
                                         <span>
                                             <span>
                                               <md-icon v-if="server.responding" class="green">graphic_eq</md-icon>
                                               <md-icon v-if="!server.responding" class="red">portable_wifi_off</md-icon>
-                                              <md-spinner :md-size="20" v-if="server.pending" md-indeterminate></md-spinner>
+                                              <md-spinner :md-size="20" v-if="server.pending"
+                                                          md-indeterminate></md-spinner>
                                             </span>
                                         </span>
                                     </md-list-item>
                                 </md-list>
-                                <line-chart :service="service.serviceName" :server="service.showGraph" v-if="service.showGraph"></line-chart>
                             </md-card-content>
                         </md-card>
                     </md-layout>
@@ -91,6 +119,7 @@
             return {
                 services: null,
                 filterResponding: null,
+                serverFilter : null,
                 filter: '',
                 server: 'http://intranettestinfo7/',
                 serverWrapper: {
@@ -105,6 +134,7 @@
                     return this.services.filter((service) => {
                         return ((this.filterResponding === null) || service.responding === this.filterResponding)
                             && ((!this.filter) || this.getUrl(service).includes(this.filter))
+                            && ((!this.serverFilter) || service.servers.filter((server) => server.host === this.serverFilter && server.responding).length > 0)
                     });
                 }
                 return [];
@@ -141,7 +171,25 @@
                         service.loading = false;
                         this.$forceUpdate();
                     })
-            }
+            },
+            openService(service){
+                this.$router.push('/services/'+service.$loki);
+            },
+            getCounter(metrics) {
+                if(metrics) {
+                    let asArray = Object.keys(metrics).filter((key) => key.startsWith('counter'))
+                        .reduce((obj, key) => {
+                            obj.push(metrics[key]);
+                            return obj;
+                        }, []);
+                    if(asArray.length === 0){
+                        return null;
+                    }
+                    return asArray
+                        .reduce((a, b) => a + b);
+                }
+            },
+
         },
         mounted() {
             axios.get(`/api/services`)
@@ -181,11 +229,13 @@
         color: #42b983;
     }
 
-    .green {
+    .md-list-item .md-icon.green,
+    .green{
         color: #00cb4b;
     }
 
-    .red {
+    .md-list-item .md-icon.red,
+    .red{
         color: #cb2832;
     }
 

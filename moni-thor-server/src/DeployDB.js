@@ -1,5 +1,6 @@
 //Thanks to Christophe Genin : https://github.com/cgenin/tomcat-deploy-web/blob/master/server/deploydb.js
 const LOGGER = require('./utils/logger');
+const path = require('path');
 
 const DeployDB = function DeployDB() {
 
@@ -10,7 +11,7 @@ const DeployDB = function DeployDB() {
     const statsCollection = 'stats';
 
     const loki = require('lokijs');
-    const db = new loki('db/data.json');
+    const db = new loki(path.join(__dirname, '../db/data.json'));
     const createIfNotExist = function (name) {
         LOGGER.debug(`createIfNotExist : ${name}`);
         if (!db.getCollection(name)) {

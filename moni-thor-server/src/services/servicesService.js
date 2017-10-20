@@ -36,6 +36,7 @@ module.exports = {
                 LOGGER.debug('received : ', 'GET', '/api/services/ping/all?service=' + serviceName);
                 const service = DeployDb.getServices().data.find((service) => service.serviceName === serviceName);
                 service.servers = [];
+                const fetchs = [];
                 if (DeployDb.getServers().data && DeployDb.getServers().data.length > 0) {
                     const services = [];
                     for (const server of DeployDb.getServers().data[0].servers) {
@@ -43,29 +44,69 @@ module.exports = {
                             .then(response => response.text())
                             .then((token) => token);
                         const serverResult = {
-                          host : server
+                            host: server
                         };
+                        const innerFetch = [];
                         const start = Date.now();
-                        await fetch(server + (service.serviceName || '') + (service.serviceToCall || ''), {headers: {'x-auth-token': token}})
+                        let afetchInfo = fetch(server + (service.serviceName || '') + (service.serviceToCall || ''), {headers: {'x-auth-token': token}});
+                        fetchs.push(afetchInfo);
+                        innerFetch.push(afetchInfo);
+                        afetchInfo
                             .then(response => response.json())
                             .then((info) => {
                                 if (!info) {
                                     throw 'Failed to reach';
                                 }
                                 const end = Date.now();
-                                LOGGER.info("Service is OK : ", server + (service.serviceName || '') + (service.serviceToCall || ''), end - start);
+                                LOGGER.info("Service is OK /info : ", server + (service.serviceName || '') + (service.serviceToCall || ''), end - start);
                                 serverResult.responseTime = end - start;
                                 serverResult.responding = true;
                                 serverResult.info = info;
                             })
                             .catch(() => {
                                 serverResult.responding = false;
-                                LOGGER.info("Failed to reach : ", server + (service.serviceName || '') + (service.serviceToCall || ''))
+                                LOGGER.info("Failed to reach /info : ", server + (service.serviceName || '') + (service.serviceToCall || ''))
                             });
-                        service.servers.push(serverResult);
+                        let afetchMetrics = fetch(server + (service.serviceName || '') + '/metrics', {headers: {'x-auth-token': token}});
+                        fetchs.push(afetchMetrics);
+                        innerFetch.push(afetchMetrics);
+                        afetchMetrics
+                            .then(response => response.json())
+                            .then((metrics) => {
+                                if (!metrics) {
+                                    throw 'Failed to reach ';
+                                }
+                                const end = Date.now();
+                                LOGGER.info("Service is OK /metrics : ", server + (service.serviceName || '') + '/metrics', end - start);
+                                serverResult.metrics = metrics;
+                            })
+                            .catch(() => {
+                                LOGGER.info("Failed to reach /metrics : ", server + (service.serviceName || '') + '/metrics')
+                            });
+                        let aFetchEnv = fetch(server + (service.serviceName || '') + '/env', {headers: {'x-auth-token': token}});
+                        fetchs.push(aFetchEnv);
+                        innerFetch.push(aFetchEnv);
+                        aFetchEnv
+                            .then(response => response.json())
+                            .then((env) => {
+                                if (!env) {
+                                    throw 'Failed to reach ';
+                                }
+                                const end = Date.now();
+                                LOGGER.info("Service is OK /env : ", server + (service.serviceName || '') + '/env', end - start);
+                                serverResult.env = env;
+                            })
+                            .catch(() => {
+                                LOGGER.info("Failed to reach /env : ", server + (service.serviceName || '') + '/env')
+                            });
+                        Promise.all(innerFetch).then(() => {
+                            service.servers.push(serverResult);
+                        });
                     }
-                    DeployDb.save(DeployDb.getServices(),service);
-                    res.send(service);
+                    Promise.all(fetchs).then(() => {
+                        DeployDb.save(DeployDb.getServices(), service);
+                        res.send(service);
+                    });
                 } else {
                     res.sendStatus(204);
                 }
@@ -79,11 +120,14 @@ module.exports = {
                     .then((token) => token);
                 LOGGER.debug('received : ', 'GET', '/api/services/ping/all?server=' + server);
                 let services = DeployDb.getServices().data;
+                const fetchs = [];
                 if (services && services.length > 0) {
                     for (const service of services) {
                         service.serverHost = server;
                         const start = Date.now();
-                        await fetch(server + (service.serviceName || '') + (service.serviceToCall || ''), {headers: {'x-auth-token': token}})
+                        let afetch = fetch(server + (service.serviceName || '') + (service.serviceToCall || ''), {headers: {'x-auth-token': token}});
+                        fetchs.push(afetch);
+                        afetch
                             .then(response => response.json())
                             .then((info) => {
                                 if (!info) {
@@ -91,7 +135,6 @@ module.exports = {
                                 }
                                 const end = Date.now();
                                 LOGGER.info("Service is OK : ", server + (service.serviceName || '') + (service.serviceToCall || ''), end - start);
-                                service.responseTime = end - start;
                                 service.responding = true;
                                 service.info = info;
                             })
@@ -100,14 +143,15 @@ module.exports = {
                                 LOGGER.info("Failed to reach : ", server + (service.serviceName || '') + (service.serviceToCall || ''))
                             });
                     }
-                    DeployDb.save(DeployDb.getStats(), services.map((service) => {
-                        return {
-                            url: server + (service.serviceName || '') + (service.serviceToCall || ''),
-                            responseTime: service.responseTime,
-                            responding: service.responding
-                        }
-                    }));
-                    res.send(services);
+                    Promise.all(fetchs).then(() => {
+                        DeployDb.save(DeployDb.getStats(), services.map((service) => {
+                            return {
+                                url: server + (service.serviceName || '') + (service.serviceToCall || ''),
+                                responding: service.responding
+                            }
+                        }));
+                        res.send(services);
+                    });
                 } else {
                     res.sendStatus(204);
                 }

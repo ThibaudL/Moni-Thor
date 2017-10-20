@@ -1,10 +1,17 @@
 {
-  "name": "moni-thor-server",
-  "version": "1.0.0",
-  "description": "Server side for the Moni-Thor app",
-  "main": "index.js",
+  "name": "moni-thor",
+  "version": "1.0.1-6",
+  "description": "Moni-Thor app, server and front",
+  "main": "src/index.js",
+  "bin": {
+    "moni-thor": "./src/index.js"
+  },
   "scripts": {
-    "start": "node %NODE_DEBUG_OPTION% src/index.js"
+    "start": "node src/index.js",
+    "debug": "node %NODE_DEBUG_OPTION% src/index.js"
+  },
+  "publishConfig": {
+    "registry": "http://intserv:8081/nexus/content/repositories/npm-internal"
   },
   "author": "",
   "license": "ISC",

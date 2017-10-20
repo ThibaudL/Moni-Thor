@@ -23,6 +23,21 @@ module.exports = {
                     }
                 }
             )
+            .delete((req, res) => {
+                    LOGGER.debug('received : ', 'DELETE', '/api/stats');
+
+                    let data = DeployDb.getStats().data;
+                    if (data.length > 0) {
+                        data.forEach((d) => {
+                           LOGGER.debug('Deleted : ',d.$loki);
+                           DeployDb.remove(DeployDb.getStats(), d.$loki);
+                        });
+                        res.sendStatus(200);
+                    } else {
+                        res.sendStatus(204);
+                    }
+                }
+            )
         ;
     }
 };

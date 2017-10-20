@@ -76,7 +76,6 @@
                             {{service.info.build}}
                         </md-tooltip>
                     </md-button>
-                    <span v-if="service.responding && service.responseTime">{{service.responseTime}} ms</span>
                     <span>
                         <span>
                           <md-icon v-if="!service.pending && service.responding" class="green">graphic_eq</md-icon>
@@ -183,11 +182,13 @@
         color: #42b983;
     }
 
-    .green {
+    .md-list-item .md-icon.green,
+    .green{
         color: #00cb4b;
     }
 
-    .red {
+    .md-list-item .md-icon.red,
+    .red{
         color: #cb2832;
     }
 

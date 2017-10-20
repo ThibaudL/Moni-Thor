@@ -4,7 +4,7 @@ import Vue from 'vue';
 import axios from 'axios';
 
 
-export default Vue.component('response-time-chart', {
+export default Vue.component('counter-chart', {
     extends: Line,
     props: ['service', 'server','limit'],
     mounted() {
@@ -17,7 +17,7 @@ export default Vue.component('response-time-chart', {
         },
         getStats() {
             let filteredMetrics = Object.keys(this.server.metrics)
-                .filter(key => key.startsWith('gauge'));
+                .filter(key => key.startsWith('counter'));
             const metrics = filteredMetrics
                 .splice(0,this.limit || filteredMetrics.length)
                 .reduce((obj, key) => {
@@ -29,7 +29,7 @@ export default Vue.component('response-time-chart', {
                 datasets: [
                     {
 
-                        label: 'ms',
+                        label: ' requests',
                         backgroundColor: '#ff5722',
                         data: Object.values(metrics)
                     }
