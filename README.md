@@ -14,6 +14,13 @@
                 url : 'YOUR_SERVICE_URL'
             }
         ```
+    - containing a jenkins.js folder :
+        - containing :
+        ```
+            module.exports = {
+                url : 'YOUR_JENSERV_URL'
+            }
+        ```
 - run 'npm install'
 - run 'npm start'
 
