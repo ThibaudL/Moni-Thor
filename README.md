@@ -27,3 +27,17 @@ Intro
 ### In moni-thor-app :
 - run 'npm install'
 - run 'npm start'
+
+### For Release :
+- run 'npm run build' in moni-thor-app
+- run 'npm publish' in moni-thor-server
+- in the designated server run : 
+> ``
+    npm i -g moni-thor
+`` to install globally
+
+> ``
+moni-thor
+`` 
+to launch the server
+
