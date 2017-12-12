@@ -8,6 +8,7 @@ import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default-dark.css' // This line here
 
 // Vue.config.productionTip = false;
+// Vue.use(VueMarkdown);
 Vue.use(VueMaterial);
 
 
@@ -17,5 +18,5 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: { App}
 });

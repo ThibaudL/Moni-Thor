@@ -6,7 +6,7 @@
             </md-app-toolbar>
             <md-app-drawer md-permanent="full">
                 <div >
-                    <img class="logo" src="./assets/hammer.png">
+                    <img class="logo" src="./assets/hammer3.png">
                 </div>
                 <md-list>
                     <md-list-item v-on:click="go('/')" v-bind:class="{ 'active': isRoute('home') }">
