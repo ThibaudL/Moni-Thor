@@ -6,15 +6,15 @@ Intro
 
 - create a "db" folder
 - create a "logs" folder
-- create a "secret" folder :
-    - containing a auth.js folder :
+- create a "secret" folder containing :
+    - a auth.js file :
         - containing :
         ```
             module.exports = {
                 url : 'YOUR_SERVICE_URL'
             }
         ```
-    - containing a jenkins.js folder :
+    - a jenkins.js file :
         - containing :
         ```
             module.exports = {
