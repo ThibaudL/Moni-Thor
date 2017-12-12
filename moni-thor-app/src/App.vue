@@ -119,23 +119,31 @@
         max-width: calc(100vw - 125px);
     }
 
-    .app li.md-list-item.active {
-        background-color: whitesmoke;
+    .app .md-list-item,
+    .app .md-list md-theme-default,
+    .app .md-drawer.md-theme-default {
+      background-color: #3c4e59;
+    }
+    .app .md-list-item.active {
+      background-color: #be5065;
     }
 
-    /*.md-fab {*/
-    /*margin: 0;*/
-    /*position: absolute;*/
-    /*bottom: -20px;*/
-    /*left: 16px;*/
-    /*}*/
+    .app .md-list.md-theme-default .md-list-item-container,
+    .app .md-icon.md-theme-default.md-icon-font{
+      color: white;
+    }
+
+  .app .md-drawer.md-permanent-full .md-list{
+    padding-bottom: 1px;
+  }
+
 </style>
 <style lang="scss">
     @import "~vue-material/dist/theme/engine"; // Import the theme engine
 
     @include md-register-theme("default", (
-            primary: md-get-palette-color(blue, A200), // The primary color of your application
-            accent: #761d14, // The accent or secondary color
+            primary: #be5065, // The primary color of your application
+            accent: #3c4e59, // The accent or secondary color
             theme: light // This can be dark or light
     ));
 

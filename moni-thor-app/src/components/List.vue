@@ -5,7 +5,7 @@
                 <h2>Services</h2>
             </span>
             <md-button md-open="hover" md-direction="left"
-                       class="md-fab md-mini md-fab-bottom-right md-warn"
+                       class="md-fab md-mini md-fab-bottom-right md-accent"
                        style="top: 10px;"
                        v-on:click="pingAll(services)">
                 <md-tooltip md-direction="top">Refresh</md-tooltip>
@@ -35,7 +35,7 @@
             <md-speed-dial md-open="hover" md-direction="left"
                            class="md-fab-bottom-right "
                            style="top: 20px;">
-                <md-button class="md-fab md-warn md-mini" md-fab-trigger
+                <md-button class="md-fab md-accent md-mini" md-fab-trigger
                            v-on:click="filterResponding = null"
                 >
                     <md-tooltip md-direction="top">Clear filter</md-tooltip>
@@ -45,14 +45,14 @@
 
                 <md-button class="md-fab md-mini md-clean"
                            v-on:click="filterResponding = false"
-                           v-bind:class="{'md-warn' : filterResponding === false}">
+                           v-bind:class="{'md-accent' : filterResponding === false}">
                     <md-tooltip md-direction="top">Offline</md-tooltip>
                     <md-icon class="red">portable_wifi_off</md-icon>
                 </md-button>
 
                 <md-button class="md-fab md-mini md-clean"
                            v-on:click="filterResponding =true"
-                           v-bind:class="{'md-warn' : filterResponding === true}">
+                           v-bind:class="{'md-accent' : filterResponding === true}">
                     <md-tooltip md-direction="top">Online</md-tooltip>
                     <md-icon class="green">graphic_eq</md-icon>
                 </md-button>
@@ -60,7 +60,7 @@
         </div>
         <div>
             <div>
-                <md-progress md-indeterminate class="md-accent" v-if="loading"></md-progress>
+                <md-progress md-indeterminate class="md-primary" v-if="loading"></md-progress>
             </div>
             <md-list v-if="!loading">
                 <md-divider></md-divider>
@@ -69,7 +69,7 @@
                         {{getUrl(service)}}
                     </label>
                     <span style="flex: 1 1 0%;"></span>
-                    <md-button class="md-raised md-accent"
+                    <md-button class="md-raised md-primary"
                                v-if="service.responding && service.info.build"
                     >{{service.info.build.version}}
                         <md-tooltip md-direction="left">

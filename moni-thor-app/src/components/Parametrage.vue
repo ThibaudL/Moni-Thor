@@ -21,7 +21,7 @@
 
                         </md-card-content>
                         <md-card-actions>
-                            <md-button class="md-raised md-accent" type="submit">
+                            <md-button class="md-raised md-primary" type="submit">
                                 Sauvegarder
                             </md-button>
                         </md-card-actions>
@@ -44,7 +44,7 @@
                     </md-field>
 
                     <md-card-actions>
-                        <md-button md-align="end" md-vertical-align="end" class="md-raised md-accent" type="button"
+                        <md-button md-align="end" md-vertical-align="end" class="md-raised md-primary" type="button"
                                    v-on:click="onSubmitServers()">
                             Sauvegarder
                         </md-button>
@@ -71,7 +71,7 @@
                         </md-field>
                     </md-card-content>
                     <md-card-actions>
-                        <md-button md-align="end" md-vertical-align="end" class="md-raised md-accent" type="button"
+                        <md-button md-align="end" md-vertical-align="end" class="md-raised md-primary" type="button"
                                    v-on:click="onSubmitJenkins()">
                             Sauvegarder
                         </md-button>

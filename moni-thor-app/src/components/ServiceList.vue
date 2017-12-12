@@ -28,7 +28,7 @@
                 <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
                 </div>
                 <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
-                    <md-button class="md-raised md-warn" v-on:click="serverFilter = null;filter = null;">
+                    <md-button class="md-raised md-accent" v-on:click="serverFilter = null;filter = null;">
                         Clear filters
                         <md-icon>clear</md-icon>
                     </md-button>
@@ -38,11 +38,7 @@
         <div>
             <md-list>
                 <div class="md-layout" md-gutter style="background-color: #f7f7f7;">
-                    <div class="md-layout-item" md-flex-xsmall="100"
-                               md-flex-small="50"
-                               md-flex-medium="50"
-                               md-flex-large="33"
-                               md-flex-xlarge="20"
+                    <div class="md-layout-item md-xsmall-size-100 md-small-size-50 md-medium-size-50 md-large-size-33 md-xlarge-size-20"
                                md-gutter v-for="service,idx in filteredServices"
                                style="padding-bottom: 15px;padding-right: 15px;">
                         <md-card style="width: 100%;">
@@ -50,13 +46,13 @@
                                 <div class="md-title">{{service.serviceName}}
                                 </div>
                                 <span style="position: absolute;right: 10px;top: 2px;">{{formatDate(service.meta.updated)}}</span>
-                                <md-button class="md-fab md-mini md-fab-bottom-right md-warn"
+                                <md-button class="md-fab md-mini md-fab-bottom-right md-accent"
                                            v-on:click="openService(service)"
                                            style="margin: -15px;    right: 70px;">
                                     <md-tooltip>Zoom</md-tooltip>
                                     <md-icon>more_horiz</md-icon>
                                 </md-button>
-                                <md-button class="md-fab md-mini md-fab-bottom-right md-warn"
+                                <md-button class="md-fab md-mini md-fab-bottom-right md-accent"
                                            v-on:click="pingService(service)"
                                            style="margin: -15px;">
                                     <md-tooltip>Refresh data</md-tooltip>
@@ -65,18 +61,18 @@
                             </md-card-header>
                             <md-card-content>
                                 <div style="padding-top: 20px;">
-                                    <md-progress md-indeterminate class="md-accent"
+                                    <md-progress md-indeterminate class="md-primary"
                                                  v-if="service.loading"></md-progress>
                                 </div>
                                 <md-list v-if="!service.loading">
                                     <md-list-item v-for="server in service.servers"
-                                                  v-bind:class="{'md-warn' : service.showGraph === server.host}"
+                                                  v-bind:class="{'md-accent' : service.showGraph === server.host}"
                                                   v-on:click="changeServer(service,server)">
                                         <label>
                                             {{server.host}}
                                         </label>
                                         <span style="flex: 1 1 0%;"></span>
-                                        <md-button class="md-raised md-accent"
+                                        <md-button class="md-raised md-primary"
                                                    v-if="server.responding && server.info.build"
                                         >{{server.info.build.version}}
                                             <md-tooltip>{{getCounter(server.metrics)}}</md-tooltip>

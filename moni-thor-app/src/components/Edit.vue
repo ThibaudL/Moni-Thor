@@ -22,7 +22,7 @@
                                 </md-field>
                             </md-card-content>
                             <md-card-actions>
-                                <md-button class="md-raised md-accent" type="button" v-on:click="deleteServer()">
+                                <md-button class="md-raised md-primary" type="button" v-on:click="deleteServer()">
                                     <span>Supprimer</span>
                                 </md-button>
                                 <md-button class="md-raised md-primary" type="submit">

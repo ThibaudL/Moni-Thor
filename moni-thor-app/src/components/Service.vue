@@ -9,13 +9,13 @@
                             </div>
                             <span style="position: absolute;right: 10px;top: 2px;"
                                   v-if="service.meta">{{formatDate(service.meta.updated)}}</span>
-                            <md-button class="md-fab md-mini md-fab-bottom-right md-warn"
+                            <md-button class="md-fab md-mini md-fab-bottom-right md-accent"
                                        v-on:click="deleteService(service)"
                                        style="margin: -15px;    right: 70px;">
                                 <md-tooltip>Supprimer</md-tooltip>
                                 <md-icon>delete</md-icon>
                             </md-button>
-                            <md-button class="md-fab md-mini md-fab-bottom-right md-warn"
+                            <md-button class="md-fab md-mini md-fab-bottom-right md-accent"
                                        v-on:click="pingService(service)"
                                        style="margin: -15px;">
                                 <md-icon>refresh</md-icon>
@@ -23,18 +23,18 @@
                         </md-card-header>
                         <md-card-content>
                             <div style="padding-top: 20px;">
-                                <md-progress md-indeterminate class="md-accent"
+                                <md-progress md-indeterminate class="md-primary"
                                              v-if="service.loading"></md-progress>
                             </div>
                             <md-list v-if="!service.loading">
                                 <md-list-item v-for="server in service.servers"
-                                              v-bind:class="{'md-warn' : service.showGraph === server.host}"
+                                              v-bind:class="{'md-accent' : service.showGraph === server.host}"
                                               v-on:click="changeServer(service,server)">
                                     <label>
                                         {{server.host}}
                                     </label>
                                     <span style="flex: 1 1 0%;"></span>
-                                    <md-button class="md-raised md-accent"
+                                    <md-button class="md-raised md-primary"
                                                v-if="server.responding && server.info.build"
                                     >{{server.info.build.version}}
                                         <md-tooltip md-direction="left">
