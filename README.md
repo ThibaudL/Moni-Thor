@@ -1,7 +1,7 @@
 # Simple vue.js monitoring application to ping your services.
 
 ## To do :
-
+Intro
 ### In moni-thor-server :
 
 - create a "db" folder
