@@ -2,16 +2,13 @@
     <div class="page-container app md-theme-default">
         <md-app>
             <md-app-toolbar style="height: 65px;">
-                <img class="md-right" src="./assets/hammer.png"
-                     style="width: 100px;transform: rotate(76deg);padding:5px;position: absolute;right: 00px;">
+              <h1>Moni-Thor</h1>
             </md-app-toolbar>
             <md-app-drawer md-permanent="full">
+                <div >
+                    <img class="logo" src="./assets/hammer.png">
+                </div>
                 <md-list>
-                    <md-list-item>
-                        <span class="md-list-item-text">
-                            <h1>Moni-Thor</h1>
-                        </span>
-                    </md-list-item>
                     <md-list-item v-on:click="go('/')" v-bind:class="{ 'active': isRoute('home') }">
                         <md-icon>home</md-icon>
                         <span class="md-list-item-text">
@@ -31,7 +28,7 @@
                             <md-list-item class="md-inset" v-on:click="go('/list')" v-bind:class="{ 'active': isRoute('list') }">
                                 <md-icon>view_list</md-icon>
                                 <span class="md-list-item-text">
-                                    List
+                                    States
                                 </span>
                             </md-list-item>
                             <md-list-item class="md-inset" v-on:click="go('/services')" v-bind:class="{ 'active': isRoute('services') }">
@@ -135,6 +132,13 @@
 
   .app .md-drawer.md-permanent-full .md-list{
     padding-bottom: 1px;
+  }
+
+  .app .logo {
+    width: 65px;
+    -webkit-transform: rotate(36deg);
+    transform: rotate(57deg);
+    margin-left: 20px;
   }
 
 </style>

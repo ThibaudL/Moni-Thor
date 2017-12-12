@@ -1,10 +1,10 @@
 <template>
     <div class="jenkins ">
-        <div class=" md-toolbar" style="height: 50px;">
+        <md-app-toolbar class=" md-toolbar" style="height: 50px;">
             <span>
                 <h2>Jenkins</h2>
             </span>
-        </div>
+        </md-app-toolbar>
         <div>
             <md-tabs @md-changed="initView">
                 <md-tab v-for="build in builds"

@@ -1,8 +1,8 @@
 <template>
     <div class="hello">
-        <md-layout>
-            <md-layout md-flex="10"></md-layout>
-            <md-layout md-flex="35">
+        <div class="md-layout">
+            <div class="md-layout-item md-size-10" ></div>
+            <div class="md-layout-item md-size-35" >
                 <md-card style="width:100%;">
                     <form v-on:submit="onSubmit()" @submit.prevent="">
                         <md-card-header class="   md-toolbar">
@@ -27,9 +27,9 @@
                         </md-card-actions>
                     </form>
                 </md-card>
-            </md-layout>
-            <md-layout md-flex="5"></md-layout>
-            <md-layout md-flex="45">
+            </div>
+            <div class="md-layout-item md-size-5" ></div>
+            <div class="md-layout-item md-size-45" >
                 <md-card style="width: 100%;">
                     <md-card-header class="   md-toolbar">
                         <div class="md-title">Serveurs (Shared Setting)</div>
@@ -50,12 +50,12 @@
                         </md-button>
                     </md-card-actions>
                 </md-card>
-            </md-layout>
-            <md-layout md-flex="5"></md-layout>
-        </md-layout>
-        <md-layout>
-            <md-layout md-flex="10"></md-layout>
-            <md-layout md-flex="35">
+            </div>
+            <div class="md-layout-item md-size-5" ></div>
+        </div>
+        <div class="md-layout">
+            <div class="md-layout-item md-size-10" ></div>
+            <div class="md-layout-item md-size-35" >
                 <md-card style="width: 100%;">
                     <md-card-header class="   md-toolbar">
                         <div class="md-title">Jenkins (Local Setting)</div>
@@ -77,9 +77,9 @@
                         </md-button>
                     </md-card-actions>
                 </md-card>
-            </md-layout>
-            <md-layout md-flex="45"></md-layout>
-        </md-layout>
+            </div>
+            <div class="md-layout-item md-size-45" ></div>
+        </div>
     </div>
 </template>
 

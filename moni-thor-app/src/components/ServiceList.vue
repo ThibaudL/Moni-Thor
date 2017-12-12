@@ -1,10 +1,10 @@
 <template>
     <div class="list">
-        <div class=" md-toolbar" style="height: 50px;">
+        <md-app-toolbar >
             <span>
-                <h2>Services</h2>
+                <h2>Servers infos > Services > list</h2>
             </span>
-        </div>
+        </md-app-toolbar>
         <div>
             <div class="md-layout" md-gutter>
                 <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
@@ -42,7 +42,7 @@
                                md-gutter v-for="service,idx in filteredServices"
                                style="padding-bottom: 15px;padding-right: 15px;">
                         <md-card style="width: 100%;">
-                            <md-card-header class="  md-toolbar">
+                            <md-card-header>
                                 <div class="md-title">{{service.serviceName}}
                                 </div>
                                 <span style="position: absolute;right: 10px;top: 2px;">{{formatDate(service.meta.updated)}}</span>

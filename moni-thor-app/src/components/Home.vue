@@ -1,10 +1,10 @@
 <template>
     <div class="list">
-        <div class=" md-toolbar" style="height: 50px;">
+        <md-app-toolbar class=" md-toolbar" style="height: 50px;">
             <span>
                 <h2>Home</h2>
             </span>
-        </div>
+        </md-app-toolbar>
         <div>
             Work In Progress
         </div>

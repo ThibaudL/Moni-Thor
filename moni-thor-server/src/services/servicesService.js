@@ -33,7 +33,7 @@ module.exports = {
         app.route('/api/services/ping')
             .get(async (req, res) => {
                 const serviceName = req.query.service;
-                LOGGER.debug('received : ', 'GET', '/api/services/ping/all?service=' + serviceName);
+            LOGGER.debug('received : ', 'GET', '/api/services/ping/all?service=' + serviceName);
                 const service = DeployDb.getServices().data.find((service) => service.serviceName === serviceName);
                 service.servers = [];
                 const fetchs = [];
