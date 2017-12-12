@@ -1,6 +1,6 @@
 <template>
     <div class="list">
-        <md-whiteframe class="md-theme-default md-toolbar" style="height: 50px;">
+        <div class=" md-toolbar" style="height: 50px;">
             <span>
                 <h2>Services</h2>
             </span>
@@ -11,27 +11,27 @@
                 <md-tooltip md-direction="top">Refresh</md-tooltip>
                 <md-icon>refresh</md-icon>
             </md-button>
-        </md-whiteframe>
-        <md-whiteframe>
-            <md-layout md-gutter>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
-                    <md-input-container>
+        </div>
+        <div>
+            <div class="md-layout" md-gutter>
+                <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                    <md-field>
                         <label>Filter</label>
                         <md-input v-model="filter"></md-input>
                         {{filteredServices.length}} results
-                    </md-input-container>
-                </md-layout>
-                <md-layout md-flex-large="10" md-flex-xlarge="20" md-row>
-                </md-layout>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
-                    <md-input-container>
+                    </md-field>
+                </div>
+                <div class="md-layout-item" md-flex-large="10" md-flex-xlarge="20" md-row>
+                </div>
+                <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                    <md-field>
                         <label for="server">Server</label>
-                        <md-select id="server" v-model="server" v-on:change="serverChanged()">
+                        <md-select id="server" name="server" v-model="server" v-on:change="serverChanged()">
                             <md-option v-for="server in serverWrapper.servers" :value="server">{{server}}</md-option>
                         </md-select>
-                    </md-input-container>
-                </md-layout>
-            </md-layout>
+                    </md-field>
+                </div>
+            </div>
             <md-speed-dial md-open="hover" md-direction="left"
                            class="md-fab-bottom-right "
                            style="top: 20px;">
@@ -57,8 +57,8 @@
                     <md-icon class="green">graphic_eq</md-icon>
                 </md-button>
             </md-speed-dial>
-        </md-whiteframe>
-        <md-whiteframe>
+        </div>
+        <div>
             <div>
                 <md-progress md-indeterminate class="md-accent" v-if="loading"></md-progress>
             </div>
@@ -90,7 +90,7 @@
                     <md-divider></md-divider>
                 </md-list-item>
             </md-list>
-        </md-whiteframe>
+        </div>
     </div>
 </template>
 

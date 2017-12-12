@@ -5,21 +5,21 @@
       <md-layout md-flex="20">
         <md-card>
           <form v-on:submit="onSubmit()" @submit.prevent="">
-            <md-card-header class=" md-theme-default md-toolbar">
+            <md-card-header class="  md-toolbar">
               <div class="md-title">Ajouter un service</div>
             </md-card-header>
 
             <md-card-content>
 
-              <md-input-container>
+              <md-field>
                 <label>Service name</label>
                 <md-input v-model="serviceName"></md-input>
-              </md-input-container>
+              </md-field>
 
-              <md-input-container>
+              <md-field>
                 <label>Service to call</label>
                 <md-input v-model="serviceToCall"></md-input>
-              </md-input-container>
+              </md-field>
             </md-card-content>
             <md-card-actions>
               <md-button class="md-fab md-mini" type="submit">
@@ -37,11 +37,9 @@
 </template>
 
 <script>
-  import MdCardContent from "../../node_modules/vue-material/src/components/mdCard/mdCardContent.vue";
   import axios from 'axios';
 
   export default {
-    components: {MdCardContent},
     name: 'add-server',
     data() {
       return {

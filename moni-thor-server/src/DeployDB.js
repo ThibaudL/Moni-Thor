@@ -9,6 +9,7 @@ const DeployDB = function DeployDB() {
     const serversCollection = 'servers';
     const servicesCollection = 'services';
     const statsCollection = 'stats';
+    const jenkinsCollection = 'jenkins';
 
     const loki = require('lokijs');
     const db = new loki(path.join(__dirname, '../db/data.json'));
@@ -27,6 +28,7 @@ const DeployDB = function DeployDB() {
                 createIfNotExist(serversCollection);
                 createIfNotExist(servicesCollection);
                 createIfNotExist(statsCollection);
+                createIfNotExist(jenkinsCollection);
                 success(db);
             });
         });
@@ -43,6 +45,9 @@ const DeployDB = function DeployDB() {
     };
     this.getStats = function () {
         return db.getCollection(statsCollection);
+    };
+    this.getJenkins = function () {
+        return db.getCollection(jenkinsCollection);
     };
 
     this.insert = function (collection, item) {

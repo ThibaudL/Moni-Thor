@@ -1,79 +1,143 @@
 <template>
-  <div>
-    <md-toolbar class="md-left md-fixed">
-      <div class="md-toolbar-container">
-        <h1 class="md-title">Moni-Thor</h1>
-        <span style="flex: 1 1 0%;"></span>
-        <md-button v-on:click="go('/')" class="md-raised" v-bind:class="{ 'md-warn': isRoute('list') }">
-          <md-icon>view_list</md-icon>
-          List
-        </md-button>
-        <md-button v-on:click="go('/services')" class="md-raised" v-bind:class="{ 'md-warn': isRoute('services') }">
-          <md-icon>featured_play_list</md-icon>
-          Services
-        </md-button>
-        <md-button v-on:click="go('/add')" class="md-raised " v-bind:class="{ 'md-warn': isRoute('add') }">
-          <md-icon >add_circle</md-icon>
-          Add
-        </md-button>
-        <md-button v-on:click="go('/settings')" class="md-raised" v-bind:class="{ 'md-warn': isRoute('settings') }">
-          <md-icon>settings</md-icon>
-          Settings
-        </md-button>
-
-        <img class="md-right" src="./assets/hammer.png" style="width: 100px;transform: rotate(76deg);padding:5px">
-          <!--<md-button class="md-fab md-mini">-->
-            <!--<md-icon>add</md-icon>-->
-          <!--</md-button>-->
-      </div>
-    </md-toolbar>
-
-    <div id="app">
-      <router-view></router-view>
-      <!--<md-bottom-bar >-->
-        <!--<md-bottom-bar-item md-icon-src="/static/hammer.png">-->
-        <!--</md-bottom-bar-item>-->
-      <!--</md-bottom-bar>-->
+    <div class="page-container app md-theme-default">
+        <md-app>
+            <md-app-toolbar style="height: 65px;">
+                <img class="md-right" src="./assets/hammer.png"
+                     style="width: 100px;transform: rotate(76deg);padding:5px;position: absolute;right: 00px;">
+            </md-app-toolbar>
+            <md-app-drawer md-permanent="full">
+                <md-list>
+                    <md-list-item>
+                        <span class="md-list-item-text">
+                            <h1>Moni-Thor</h1>
+                        </span>
+                    </md-list-item>
+                    <md-list-item v-on:click="go('/')" v-bind:class="{ 'active': isRoute('home') }">
+                        <md-icon>home</md-icon>
+                        <span class="md-list-item-text">
+                            Home
+                        </span>
+                    </md-list-item>
+                    <md-list-item v-on:click="go('/jenkins')" v-bind:class="{ 'active': isRoute('jenkins') }">
+                        <md-icon>rowing</md-icon>
+                        <span class="md-list-item-text">
+                            Jenkins
+                        </span>
+                    </md-list-item>
+                    <md-list-item md-expand v-bind:class="{ 'active': isRoute('list') || isRoute('services') ||  isRoute('add') }">
+                        <md-icon>view_list</md-icon>
+                        <span class="md-list-item-text">Servers infos</span>
+                        <md-list slot="md-expand">
+                            <md-list-item class="md-inset" v-on:click="go('/list')" v-bind:class="{ 'active': isRoute('list') }">
+                                <md-icon>view_list</md-icon>
+                                <span class="md-list-item-text">
+                                    List
+                                </span>
+                            </md-list-item>
+                            <md-list-item class="md-inset" v-on:click="go('/services')" v-bind:class="{ 'active': isRoute('services') }">
+                                <md-icon>featured_play_list</md-icon>
+                                <span class="md-list-item-text">
+                                    Services
+                                </span>
+                            </md-list-item>
+                            <md-list-item class="md-inset" v-on:click="go('/add')" v-bind:class="{ 'active': isRoute('add') }">
+                                <md-icon>add_circle</md-icon>
+                                <span class="md-list-item-text">
+                                    Add
+                                </span>
+                            </md-list-item>
+                        </md-list>
+                    </md-list-item>
+                    <md-list-item v-on:click="go('/settings')" v-bind:class="{ 'active': isRoute('settings') }">
+                        <md-icon>settings</md-icon>
+                        <span class="md-list-item-text">
+                            Settings
+                        </span>
+                    </md-list-item>
+                </md-list>
+            </md-app-drawer>
+            <md-app-content style="min-height: calc(-65px + 100vh);">
+                <div>
+                    <router-view></router-view>
+                    <!--<md-bottom-bar >-->
+                    <!--<md-bottom-bar-item md-icon-src="/static/hammer.png">-->
+                    <!--</md-bottom-bar-item>-->
+                    <!--</md-bottom-bar>-->
+                </div>
+            </md-app-content>
+        </md-app>
     </div>
-  </div>
 </template>
 
 <script>
-  import MdBottomBarItem from "../node_modules/vue-material/src/components/mdBottomBar/mdBottomBarItem.vue";
 
-  export default {
-    components: {MdBottomBarItem},
-    name: 'app',
-    methods : {
-      go(url){
-        this.$router.push(url);
-      },
-      isRoute(route){
-        return this.$route.name === route;
-      }
+
+    export default {
+        name: 'app',
+        methods: {
+            go(url) {
+                this.$router.push(url);
+            },
+            isRoute(route) {
+                return this.$route.name === route;
+            }
+        }
     }
-  }
 </script>
 
+<style lang="scss">
+    @import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+    @include md-register-theme("default", (
+            primary: md-get-palette-color(blue, A200), // The primary color of your application
+            accent: md-get-palette-color(red, A200) // The accent or secondary color
+    ));
+
+    @import "~vue-material/dist/theme/all"; // Apply the theme
+</style>
+
 <style>
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin: 15px;
-  }
+    #app {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin: 15px;
+    }
 
-  .md-whiteframe {
-    background-color: #f7f7f7;
-    padding: 15px;
-  }
+    .md-app {
+    }
 
-  /*.md-fab {*/
+    .md-whiteframe {
+        background-color: #f7f7f7;
+        padding: 15px;
+    }
+
+    .md-drawer {
+        width: 230px;
+        max-width: calc(100vw - 125px);
+    }
+
+    .app li.md-list-item.active {
+        background-color: whitesmoke;
+    }
+
+    /*.md-fab {*/
     /*margin: 0;*/
     /*position: absolute;*/
     /*bottom: -20px;*/
     /*left: 16px;*/
-  /*}*/
+    /*}*/
+</style>
+<style lang="scss">
+    @import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+    @include md-register-theme("default", (
+            primary: md-get-palette-color(blue, A200), // The primary color of your application
+            accent: #761d14, // The accent or secondary color
+            theme: light // This can be dark or light
+    ));
+
+    @import "~vue-material/dist/theme/all"; // Apply the theme
 </style>

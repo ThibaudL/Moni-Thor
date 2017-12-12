@@ -17,7 +17,7 @@ export default Vue.component('response-time-chart', {
         },
         getStats() {
             let filteredMetrics = Object.keys(this.server.metrics)
-                .filter(key => key.startsWith('gauge'));
+                .filter(key => key.startsWith('gauge') && !key.includes('hystrix'));
             const metrics = filteredMetrics
                 .splice(0,this.limit || filteredMetrics.length)
                 .reduce((obj, key) => {

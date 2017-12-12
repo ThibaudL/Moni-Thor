@@ -1,44 +1,44 @@
 <template>
     <div class="list">
-        <md-whiteframe class="md-theme-default md-toolbar" style="height: 50px;">
+        <div class=" md-toolbar" style="height: 50px;">
             <span>
                 <h2>Services</h2>
             </span>
-        </md-whiteframe>
-        <md-whiteframe>
-            <md-layout md-gutter>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
-                    <md-input-container>
+        </div>
+        <div>
+            <div class="md-layout" md-gutter>
+                <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                    <md-field>
                         <label>Filter</label>
                         <md-input v-model="filter"></md-input>
                         {{filteredServices.length}} results
-                    </md-input-container>
-                </md-layout>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
-                </md-layout>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
-                    <md-input-container>
+                    </md-field>
+                </div>
+                <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                </div>
+                <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                    <md-field>
                         <label for="server">Server</label>
-                        <md-select id="server" v-model="serverFilter">
+                        <md-select id="server" v-model="serverFilter" name="server">
                             <md-option :value="null"></md-option>
                             <md-option v-for="server in serverWrapper.servers" :value="server">{{server}}</md-option>
                         </md-select>
-                    </md-input-container>
-                </md-layout>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
-                </md-layout>
-                <md-layout md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                    </md-field>
+                </div>
+                <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
+                </div>
+                <div class="md-layout-item" md-flex-xsmall="100" md-flex-large="20" md-flex-xlarge="20" md-row>
                     <md-button class="md-raised md-warn" v-on:click="serverFilter = null;filter = null;">
                         Clear filters
                         <md-icon>clear</md-icon>
                     </md-button>
-                </md-layout>
-            </md-layout>
-        </md-whiteframe>
-        <md-whiteframe>
+                </div>
+            </div>
+        </div>
+        <div>
             <md-list>
-                <md-layout md-gutter style="background-color: #f7f7f7;">
-                    <md-layout md-flex-xsmall="100"
+                <div class="md-layout" md-gutter style="background-color: #f7f7f7;">
+                    <div class="md-layout-item" md-flex-xsmall="100"
                                md-flex-small="50"
                                md-flex-medium="50"
                                md-flex-large="33"
@@ -46,7 +46,7 @@
                                md-gutter v-for="service,idx in filteredServices"
                                style="padding-bottom: 15px;padding-right: 15px;">
                         <md-card style="width: 100%;">
-                            <md-card-header class=" md-theme-default md-toolbar">
+                            <md-card-header class="  md-toolbar">
                                 <div class="md-title">{{service.serviceName}}
                                 </div>
                                 <span style="position: absolute;right: 10px;top: 2px;">{{formatDate(service.meta.updated)}}</span>
@@ -97,22 +97,21 @@
                                 </md-list>
                             </md-card-content>
                         </md-card>
-                    </md-layout>
-                </md-layout>
+                    </div>
+                </div>
             </md-list>
-        </md-whiteframe>
+        </div>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
     import Vue from 'vue'
-    import MdListItem from "../../node_modules/vue-material/src/components/mdList/mdListItemButton.vue";
     import ResponseTimeChart from './charts/ResponseTimeChart';
 
     export default {
         components: {
-            MdListItem, ResponseTimeChart
+            ResponseTimeChart
         },
         name: 'list',
         data() {

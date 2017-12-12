@@ -2,9 +2,9 @@
     <div class="list">
         <md-layout md-gutter>
             <md-layout md-flex-xsmall="100" md-flex-large="40" md-flex-xlarge="40" md-row>
-                <md-whiteframe style="width: 100%">
+                <div style="width: 100%">
                     <md-card style="width: 100%;">
-                        <md-card-header class=" md-theme-default md-toolbar">
+                        <md-card-header class="  md-toolbar">
                             <div class="md-title">{{service.serviceName}}
                             </div>
                             <span style="position: absolute;right: 10px;top: 2px;"
@@ -55,8 +55,8 @@
                                         </span>
                                 </md-list-item>
                             </md-list>
-                            <md-whiteframe v-for="server in service.servers" style="text-align: left"
-                                           v-if="service.showGraph === server.host && !service.loading && server.env">
+                            <div v-for="server in service.servers" style="text-align: left"
+                                           v-if="service.showGraph === server.host && !service.loading && server.env && service.servers.length > 0">
                                 <div >
                                     <ul style="display: grid">
                                         <li>Profiles : {{arrayToStringList(server.env.profiles)}}</li>
@@ -70,19 +70,19 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </md-whiteframe>
+                            </div>
                         </md-card-content>
                     </md-card>
-                </md-whiteframe>
+                </div>
             </md-layout>
             <md-layout md-flex-xsmall="100" md-flex-large="60" md-flex-xlarge="60" md-row>
                 <div v-for="server in service.servers" style="width: 100%;"
                      v-if="service.showGraph === server.host && !service.loading && server.metrics">
-                    <md-whiteframe>
+                    <div>
                         <h3>{{server.host}}</h3>
                         <span>Metrics last update : {{formatDate(service.meta.updated)}}</span>
-                    </md-whiteframe>
-                    <md-whiteframe>
+                    </div>
+                    <div>
                         <md-layout md-gutter>
                             <md-layout md-flex-xsmall="100" md-flex-large="30" md-flex-xlarge="30" md-row>
                                 Nb request : {{getCounter(server.metrics)}}
@@ -100,25 +100,25 @@
                                 Cache : {{getCache(server.metrics)}}
                             </md-layout>
                         </md-layout>
-                    </md-whiteframe>
-                    <md-whiteframe
+                    </div>
+                    <div
                             v-if="service.showGraph === server.host && !service.loading && server.metrics">
-                        <md-whiteframe style="margin: 25px;">
+                        <div style="margin: 25px;">
                             Response time :
-                        </md-whiteframe>
+                        </div>
 
                         <response-time-chart :service="service.serviceName" :server="server"
                                              :limit="limit"></response-time-chart>
 
-                        <md-whiteframe style="margin: 25px;">
+                        <div style="margin: 25px;">
                             Counters :
-                        </md-whiteframe>
+                        </div>
                         <counter-chart :service="service.serviceName" :server="server"
                                        :limit="limit"></counter-chart>
                         <div v-if="service.showGraph === server.host && !service.loading && !server.metrics">
                             No metrics, you might need to refresh datas.
                         </div>
-                    </md-whiteframe>
+                    </div>
                 </div>
 
             </md-layout>

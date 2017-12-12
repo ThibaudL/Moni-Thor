@@ -3,23 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.css'
+import VueMaterial from 'vue-material/dist/vue-material.min'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default-dark.css' // This line here
 
-Vue.config.productionTip = false;
+// Vue.config.productionTip = false;
 Vue.use(VueMaterial);
-Vue.material.registerTheme({
-  default: {
-    primary: {
-      color : 'red',
-      hue : 800
-    },
-    accent:  {
-      color : 'blue',
-      hue : 200
-    }
-  }
-});
 
 
 

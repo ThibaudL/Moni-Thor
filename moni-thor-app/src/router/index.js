@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import List from '@/components/List';
+import Home from '@/components/Home';
+import Jenkins from '@/components/Jenkins';
 import AddServices from '@/components/AddServices';
 import Parametrage from '@/components/Parametrage';
 import Edit from '@/components/Edit';
@@ -13,8 +15,18 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'home',
+      component: Home
+    },
+    {
+      path: '/list',
       name: 'list',
       component: List
+    },
+    {
+      path: '/jenkins',
+      name: 'jenkins',
+      component: Jenkins
     },
     {
       path: '/services',

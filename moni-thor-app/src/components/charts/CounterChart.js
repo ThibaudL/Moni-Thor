@@ -17,7 +17,7 @@ export default Vue.component('counter-chart', {
         },
         getStats() {
             let filteredMetrics = Object.keys(this.server.metrics)
-                .filter(key => key.startsWith('counter'));
+                .filter(key => key.startsWith('counter') && !key.includes('hystrix'));
             const metrics = filteredMetrics
                 .splice(0,this.limit || filteredMetrics.length)
                 .reduce((obj, key) => {

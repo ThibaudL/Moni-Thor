@@ -8,6 +8,7 @@ const settingsService = require('./services/settingsService');
 const serversService = require('./services/serversService');
 const servicesService = require('./services/servicesService');
 const statsService = require('./services/statsService');
+const jenkinsService = require('./services/jenkinsService');
 const LOGGER = require('./utils/logger');
 const path = require('path');
 
@@ -20,6 +21,7 @@ DeployDb.init().then(() => {
     serversService.registerService(app,DeployDb);
     servicesService.registerService(app,DeployDb);
     statsService.registerService(app,DeployDb);
+    jenkinsService.registerService(app,DeployDb);
 
     LOGGER.info("Service started on port : "+port);
     LOGGER.info("http://localhost:"+port);
