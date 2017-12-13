@@ -27,7 +27,7 @@
           <md-field>
             <label for="s">Server</label>
             <md-select id="s" name="s" v-model="server" v-on:change="serverChanged()">
-              <md-option v-for="server in serverWrapper.servers" :value="server">{{server}}</md-option>
+              <md-option v-for="server in serverWrapper.servers" :label="server" :value="server">{{server}}</md-option>
             </md-select>
           </md-field>
         </div>

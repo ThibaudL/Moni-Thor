@@ -12,7 +12,7 @@
                 Tutorial
               </md-card-header>
               <md-card-content>
-                  <vue-markdown>{{test}}</vue-markdown>
+                  <vue-markdown :source="test"></vue-markdown>
               </md-card-content>
             </md-card>
           </div>
@@ -32,9 +32,10 @@
         name: 'home',
         data() {
             return {
-              test : `>Test tutorial Markdown
-                **test**
-                i am a ~~tast~~ **test**.
+              test : `# [Java8]
+              *Test tutorial Markdown*
+              **test**
+              i am a ~~tast~~ **test**.
               `
             }
         },
