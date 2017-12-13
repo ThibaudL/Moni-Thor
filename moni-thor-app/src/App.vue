@@ -1,10 +1,10 @@
 <template>
     <div class="page-container app md-theme-default">
-        <md-app>
-            <md-app-toolbar style="height: 65px;">
+        <md-app >
+            <md-app-toolbar style="height: 65px;margin-left: 230px;">
               <h1>Moni-Thor</h1>
             </md-app-toolbar>
-            <md-app-drawer md-permanent="full">
+            <md-app-drawer md-permanent="full" style="position: fixed;">
                 <div >
                     <img class="logo" src="./assets/hammer3.png">
                 </div>
@@ -53,7 +53,7 @@
                     </md-list-item>
                 </md-list>
             </md-app-drawer>
-            <md-app-content style="min-height: calc(-65px + 100vh);">
+            <md-app-content style="min-height: calc(-65px + 100vh);margin-left: 230px;">
                 <div>
                     <router-view></router-view>
                     <!--<md-bottom-bar >-->
@@ -116,17 +116,17 @@
         max-width: calc(100vw - 125px);
     }
 
-    .app .md-list-item,
-    .app .md-list md-theme-default,
+    .md-app-drawer .md-list-item,
+    .md-app-drawer .md-list md-theme-default,
     .app .md-drawer.md-theme-default {
       background-color: #3c4e59;
     }
-    .app .md-list-item.active {
+    .md-app-drawer .md-list-item.active {
       background-color: #be5065;
     }
 
-    .app .md-list.md-theme-default .md-list-item-container,
-    .app .md-icon.md-theme-default.md-icon-font{
+    .md-app-drawer .md-list.md-theme-default .md-list-item-container,
+    .md-app-drawer .md-icon.md-theme-default.md-icon-font{
       color: white;
     }
 

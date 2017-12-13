@@ -144,12 +144,12 @@ module.exports = {
                             });
                     }
                     Promise.all(fetchs).then(() => {
-                        DeployDb.save(DeployDb.getStats(), services.map((service) => {
-                            return {
-                                url: server + (service.serviceName || '') + (service.serviceToCall || ''),
-                                responding: service.responding
-                            }
-                        }));
+                        // DeployDb.save(DeployDb.getStats(), services.map((service) => {
+                        //     return {
+                        //         url: server + (service.serviceName || '') + (service.serviceToCall || ''),
+                        //         responding: service.responding
+                        //     }
+                        // }));
                         res.send(services);
                     });
                 } else {

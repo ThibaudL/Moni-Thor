@@ -62,11 +62,6 @@
                     </md-card-header>
                     <md-card-content>
                         <md-field>
-                            <label>Username</label>
-                            <md-input v-model="jenkinsSettings.user"></md-input>
-                        </md-field>
-
-                        <md-field>
                             <md-chips v-model="jenkinsSettings.views" md-input-placeholder="Add a view"></md-chips>
                         </md-field>
                     </md-card-content>
@@ -116,12 +111,11 @@
                     };
                 })
                 .catch((error) => console.error(error));
-            let jenkinsSettings = window.localStorage.getItem('jenkinsSettings');
+            let jenkinsSettings = window.localStorage.getItem('jenkinsSettingsV2');
             if (jenkinsSettings) {
                 this.jenkinsSettings = JSON.parse(jenkinsSettings);
             }else{
-                this.jenkinsSettings.user = 'T_LAMARCHE';
-                this.jenkinsSettings.views = ['Sinistre', 'Contrats', 'Ged', 'Directives', 'Partenaires', 'Siveer', 'Framework'];
+                this.jenkinsSettings.views = ['Sinistre@T_LAMARCHE', 'Contrats@T_LAMARCHE', 'Ged@T_LAMARCHE', 'Directives@T_LAMARCHE', 'Partenaires@T_LAMARCHE', 'Siveer@T_LAMARCHE', 'Framework@T_LAMARCHE'];
             }
         },
         methods: {
@@ -136,7 +130,7 @@
                     .then(() => this.$router.push('/'));
             },
             onSubmitJenkins() {
-                window.localStorage.setItem('jenkinsSettings', JSON.stringify(this.jenkinsSettings));
+                window.localStorage.setItem('jenkinsSettingsV2', JSON.stringify(this.jenkinsSettings));
             }
         }
     }

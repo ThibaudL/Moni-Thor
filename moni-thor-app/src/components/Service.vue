@@ -11,13 +11,13 @@
                                   v-if="service.meta">{{formatDate(service.meta.updated)}}</span>
                             <md-button class="md-fab md-mini md-fab-bottom-right md-accent"
                                        v-on:click="deleteService(service)"
-                                       style="margin: -15px;    right: 70px;">
+                                       style="margin: -15px;    right: 70px;top: 40px;">
                                 <md-tooltip>Supprimer</md-tooltip>
                                 <md-icon>delete</md-icon>
                             </md-button>
                             <md-button class="md-fab md-mini md-fab-bottom-right md-accent"
                                        v-on:click="pingService(service)"
-                                       style="margin: -15px;">
+                                       style="margin: -15px;top: 40px;">
                                 <md-icon>refresh</md-icon>
                             </md-button>
                         </md-card-header>

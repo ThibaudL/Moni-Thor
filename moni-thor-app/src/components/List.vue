@@ -35,27 +35,28 @@
       <md-speed-dial md-open="hover" md-direction="left"
                      class="md-fab-bottom-right "
                      style="top: 20px;">
-        <md-button class="md-fab md-accent md-mini" md-fab-trigger
-                   v-on:click="filterResponding = null"
-        >
-          <md-tooltip md-direction="top">Clear filter</md-tooltip>
-          <md-icon md-icon-morph>close</md-icon>
-          <md-icon>filter_list</md-icon>
-        </md-button>
 
-        <md-button class="md-fab md-mini md-clean"
-                   v-on:click="filterResponding = false"
-                   v-bind:class="{'md-accent' : filterResponding === false}">
-          <md-tooltip md-direction="top">Offline</md-tooltip>
-          <md-icon class="red">portable_wifi_off</md-icon>
-        </md-button>
+        <md-speed-dial-target @click="filterResponding">
+          <md-icon class="md-morph-initial">filter_list</md-icon>
+          <md-icon class="md-morph-final">close</md-icon>
+        </md-speed-dial-target>
 
-        <md-button class="md-fab md-mini md-clean"
-                   v-on:click="filterResponding =true"
-                   v-bind:class="{'md-accent' : filterResponding === true}">
-          <md-tooltip md-direction="top">Online</md-tooltip>
-          <md-icon class="green">graphic_eq</md-icon>
-        </md-button>
+
+        <md-speed-dial-content>
+          <md-button class="md-fab md-mini md-clean"
+                     v-on:click="filterResponding = false"
+                     v-bind:class="{'md-warn' : filterResponding === false}">
+            <md-tooltip md-direction="top">Offline</md-tooltip>
+            <md-icon class="red">portable_wifi_off</md-icon>
+          </md-button>
+
+          <md-button class="md-fab md-mini md-clean"
+                     v-on:click="filterResponding =true"
+                     v-bind:class="{'md-warn' : filterResponding === true}">
+            <md-tooltip md-direction="top">Online</md-tooltip>
+            <md-icon class="green">graphic_eq</md-icon>
+          </md-button>
+        </md-speed-dial-content>
       </md-speed-dial>
     </div>
     <div>

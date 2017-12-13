@@ -44,27 +44,24 @@
                         <md-card style="width: 100%;">
                             <md-card-header>
                                 <div class="md-title">{{service.serviceName}}
+                                    <md-progress-bar class="md-primary" md-mode="indeterminate" v-if="service.loading"></md-progress-bar>
                                 </div>
                                 <span style="position: absolute;right: 10px;top: 2px;">{{formatDate(service.meta.updated)}}</span>
                                 <md-button class="md-fab md-mini md-fab-bottom-right md-accent"
                                            v-on:click="openService(service)"
-                                           style="margin: -15px;    right: 70px;">
+                                           style="margin: -15px;    right: 70px;    top: 40px;">
                                     <md-tooltip>Zoom</md-tooltip>
                                     <md-icon>more_horiz</md-icon>
                                 </md-button>
                                 <md-button class="md-fab md-mini md-fab-bottom-right md-accent"
                                            v-on:click="pingService(service)"
-                                           style="margin: -15px;">
+                                           style="margin: -15px;    top: 40px;">
                                     <md-tooltip>Refresh data</md-tooltip>
                                     <md-icon>refresh</md-icon>
                                 </md-button>
                             </md-card-header>
                             <md-card-content>
-                                <div style="padding-top: 20px;">
-                                    <md-progress md-indeterminate class="md-primary"
-                                                 v-if="service.loading"></md-progress>
-                                </div>
-                                <md-list v-if="!service.loading">
+                                <md-list>
                                     <md-list-item v-for="server in service.servers"
                                                   v-bind:class="{'md-accent' : service.showGraph === server.host}"
                                                   v-on:click="changeServer(service,server)">
@@ -75,7 +72,7 @@
                                         <md-button class="md-raised md-primary"
                                                    v-if="server.responding && server.info.build"
                                         >{{server.info.build.version}}
-                                            <md-tooltip>{{getCounter(server.metrics)}}</md-tooltip>
+                                            <md-tooltip>Nombre de requêtes reçues : {{getCounter(server.metrics)}}</md-tooltip>
                                         </md-button>
                                         <md-button class=""
                                                    v-if="server.responding && !server.info.build"
