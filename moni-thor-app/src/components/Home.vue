@@ -32,10 +32,15 @@
         name: 'home',
         data() {
             return {
-              test : `# [Java8]
-              *Test tutorial Markdown*
-              **test**
-              i am a ~~tast~~ **test**.
+              test : `
+# [Java8][1st Tutorial](U1st_tutorial)
+*Test tutorial Markdown*
+**test**
+i am a ~~tast~~ **test**.
+\`\`\` java
+Interface1 i1 = (s) -> System.out.println(s);
+i1.method1("abc");
+\`\`\`
               `
             }
         },

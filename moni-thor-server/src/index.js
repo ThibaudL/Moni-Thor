@@ -11,18 +11,28 @@ const statsService = require('./services/statsService');
 const jenkinsService = require('./services/jenkinsService');
 const LOGGER = require('./utils/logger');
 const path = require('path');
+const WebSocket = require('ws');
+const http = require('http');
+const server = http.createServer(app);
 
-DeployDb.init().then(() => {
-    LOGGER.info("db initialized");
-    app.listen(port);
-    app.use(bodyParser.json()); // for parsing application/json
-    app.use('/', express.static(path.join(__dirname, '../static')));
-    settingsService.registerService(app,DeployDb);
-    serversService.registerService(app,DeployDb);
-    servicesService.registerService(app,DeployDb);
-    statsService.registerService(app,DeployDb);
-    jenkinsService.registerService(app,DeployDb);
+app.use(bodyParser.json()); // for parsing application/json
+app.use('/', express.static(path.join(__dirname, '../static')));
 
-    LOGGER.info("Service started on port : "+port);
-    LOGGER.info("http://localhost:"+port);
-});
+let wsServer = new WebSocket.Server({server});
+// console.log(wsServer);
+// wsServer.on('connection', (ws) => {
+    console.log('connection');
+    DeployDb.init().then(() => {
+        LOGGER.info("db initialized");
+        settingsService.registerService(app, DeployDb);
+        serversService.registerService(app, DeployDb);
+        servicesService.registerService(app, DeployDb);
+        statsService.registerService(app, DeployDb);
+        jenkinsService.registerService(app, DeployDb);
+        // jenkinsService.registerService(app, DeployDb, ws);
+
+        LOGGER.info("Service started on port : " + port);
+        LOGGER.info("http://localhost:" + port);
+    });
+// });
+server.listen(port, () => console.log('listening'));

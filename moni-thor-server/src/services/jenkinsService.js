@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 const jenkins = require('../../secret/jenkins');
 
 module.exports = {
-    registerService(app, DeployDb) {
+    registerService(app, DeployDb,ws) {
         LOGGER.info('registered : jenkins service');
         app.route('/api/jenkins/build/user/:user/view/:view')
             .get((req, res) => {
