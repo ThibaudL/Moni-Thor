@@ -19,20 +19,16 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use('/', express.static(path.join(__dirname, '../static')));
 
 let wsServer = new WebSocket.Server({server});
-// console.log(wsServer);
-// wsServer.on('connection', (ws) => {
-    console.log('connection');
-    DeployDb.init().then(() => {
-        LOGGER.info("db initialized");
-        settingsService.registerService(app, DeployDb);
-        serversService.registerService(app, DeployDb);
-        servicesService.registerService(app, DeployDb);
-        statsService.registerService(app, DeployDb);
-        jenkinsService.registerService(app, DeployDb);
-        // jenkinsService.registerService(app, DeployDb, ws);
+DeployDb.init().then(() => {
+    LOGGER.info("db initialized");
+    settingsService.registerService(app, DeployDb);
+    serversService.registerService(app, DeployDb);
+    servicesService.registerService(app, DeployDb);
+    statsService.registerService(app, DeployDb);
+    jenkinsService.registerService(app, DeployDb,wsServer);
+    // jenkinsService.registerService(app, DeployDb, ws);
 
-        LOGGER.info("Service started on port : " + port);
-        LOGGER.info("http://localhost:" + port);
-    });
-// });
-server.listen(port, () => console.log('listening'));
+    LOGGER.info("Service started on port : " + port);
+    LOGGER.info("http://localhost:" + port);
+});
+server.listen(port, () => console.log('server listening on',server.address().port));

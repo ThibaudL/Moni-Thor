@@ -142,12 +142,27 @@
                 if (username && this.ldapUser) {
                     return username.includes(this.ldapUser);
                 }
+            },
+            initWs(user){
+                const BrowserWebSocket = require('browser-websocket');
+                const ws = new BrowserWebSocket('ws://mdpa-10984:9003', {
+                    rejectUnauthorized: false
+                });
+
+                ws.on('open', () => {
+                    ws.emit('register:'+user);
+                });
+
+                ws.on('message', (e) => {
+                    console.log(e);
+                });
             }
         },
         mounted() {
             chrome.runtime.sendMessage('ohaiaamkoajhocfibmnlcnbjlgjmgaeh', {"getUser": 1},
                 (response) => {
                     this.ldapUser = response.user;
+                    this.initWs(this.ldapUser);
                 }
             );
 

@@ -32,11 +32,13 @@
           </md-field>
         </div>
       </div>
-      <md-speed-dial md-open="hover" md-direction="left"
+      <md-speed-dial md-open="hover" md-direction="top"
                      class="md-fab-bottom-right "
                      style="top: 20px;">
 
-        <md-speed-dial-target @click="filterResponding">
+        <md-speed-dial-target
+                v-on:click="filterResponding">
+
           <md-icon class="md-morph-initial">filter_list</md-icon>
           <md-icon class="md-morph-final">close</md-icon>
         </md-speed-dial-target>
@@ -117,10 +119,14 @@
       filteredServices() {
         if (this.services) {
           return this.services.filter((service) => {
-            return ((this.filterResponding === null) || service.responding === this.filterResponding)
-              && ((!this.filter) || this.getUrl(service).includes(this.filter))
+              let newVar = ((this.filterResponding === null) || service.responding === this.filterResponding)
+                  && ((!this.filter) || this.getUrl(service).includes(this.filter));
+              console.log(newVar);
+              return ((this.filterResponding === null) || service.responding === this.filterResponding)
+                  && ((!this.filter) || this.getUrl(service).includes(this.filter))
           });
         }
+        console.log([]);
         return [];
       }
     },
@@ -156,6 +162,7 @@
           this.serverWrapper = response.data || {
             servers: []
           };
+          this.pingAll();
         })
         .catch((error) => console.error(error));
 

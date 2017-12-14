@@ -2,8 +2,18 @@ const LOGGER = require('../utils/logger');
 const fetch = require('node-fetch');
 const jenkins = require('../../secret/jenkins');
 
+const connectedUsers = [];
 module.exports = {
-    registerService(app, DeployDb,ws) {
+    registerService(app, DeployDb,wsServer) {
+        wsServer.on('connection', (ws) => {
+            console.log('connection');
+            ws.on('message', (message) => {
+                if(message.startsWith('register:')){
+                    connectedUsers.push(message.split(':')[1]);
+                }
+            });
+        });
+
         LOGGER.info('registered : jenkins service');
         app.route('/api/jenkins/build/user/:user/view/:view')
             .get((req, res) => {
@@ -27,9 +37,6 @@ module.exports = {
                                                     return j && j.infos && j.infos.lastBuild && j.infos.lastBuild.number === job.infos.lastBuild.number
                                                 }
                                             );
-                                    }
-                                    if (lastBuildForJob) {
-                                        console.log('Cache Found for build : ' + build.name + ' number : ' + job.infos.lastBuild.number);
                                     }
                                     if (!lastBuildForJob && infos) {
                                         let promisesInfos = [];
@@ -64,7 +71,6 @@ module.exports = {
                         });
                         Promise.all(promises).then(() => {
                             if (savedBuilds) {
-                                console.log("Jenkins : Removing $loki:" + savedBuilds.$loki);
                                 DeployDb.remove(DeployDb.getJenkins(), savedBuilds.$loki);
                             }
                             DeployDb.save(DeployDb.getJenkins(), build);
