@@ -32,9 +32,8 @@
           </md-field>
         </div>
       </div>
-      <md-speed-dial md-open="hover" md-direction="top"
-                     class="md-fab-bottom-right "
-                     style="top: 20px;">
+      <md-speed-dial md-open="hover" md-direction="bottom"
+                     class="right">
 
         <md-speed-dial-target
                 v-on:click="filterResponding">
@@ -119,14 +118,10 @@
       filteredServices() {
         if (this.services) {
           return this.services.filter((service) => {
-              let newVar = ((this.filterResponding === null) || service.responding === this.filterResponding)
-                  && ((!this.filter) || this.getUrl(service).includes(this.filter));
-              console.log(newVar);
               return ((this.filterResponding === null) || service.responding === this.filterResponding)
                   && ((!this.filter) || this.getUrl(service).includes(this.filter))
           });
         }
-        console.log([]);
         return [];
       }
     },

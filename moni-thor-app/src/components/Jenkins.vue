@@ -8,7 +8,7 @@
         <div>
             <md-progress-bar class="md-primary" md-mode="indeterminate" v-if="loading"></md-progress-bar>
             <md-tabs @md-changed="initView">
-                <md-tab v-for="build in builds"
+                <md-tab v-for="build in JenkinsStore.builds"
                         :id="build.name"
                         :md-label="build.name"
                         :md-icon="getIcon(build)"
@@ -85,9 +85,9 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import Vue from 'vue'
     import * as VueMaterial from "vue-material";
+    import JenkinsStore from "../store/JenkinsStore";
 
     export default {
         name: 'jenkins',
@@ -101,7 +101,8 @@
                     data: ''
                 },
                 loading: true,
-                ldapUser: ''
+                ldapUser: '',
+                JenkinsStore : JenkinsStore
             }
         },
         computed: {},
@@ -120,17 +121,11 @@
             twoDigits(time) {
                 return time < 10 ? '0' + time : time;
             },
-            getLastBuilds(user, view) {
-                return axios.get(`api/jenkins/build/user/${user}/view/${view}`).then((response) => response.data);
-            },
-            getInfos(url) {
-                return axios.get(`api/jenkins/infos?url=${encodeURIComponent(url)}`).then((response) => response.data);
-            },
 //            getExecutors() {
 //                return axios.get(`/ajaxExecutors`).then((response) => response.data);
 //            },
             getIcon(build) {
-                if (build.jobs.filter((job) => job.color !== 'blue' && job.color !== 'blue_anime').length > 0) {
+                if (build.jobs.filter((job) => job.color.startsWith('red') || job.color.startsWith('yellow')).length > 0) {
                     return 'add_alert';
                 }
                 return 'done';
@@ -143,14 +138,14 @@
                     return username.includes(this.ldapUser);
                 }
             },
-            initWs(user){
+            initWs(user) {
                 const BrowserWebSocket = require('browser-websocket');
                 const ws = new BrowserWebSocket('ws://mdpa-10984:9003', {
                     rejectUnauthorized: false
                 });
 
                 ws.on('open', () => {
-                    ws.emit('register:'+user);
+                    ws.emit('register:' + user);
                 });
 
                 ws.on('message', (e) => {
@@ -167,49 +162,9 @@
             );
 
             this.loading = true;
-            let jenkinsSettings = window.localStorage.getItem('jenkinsSettingsV2');
-            if (jenkinsSettings) {
-                let parsedJenkinsSettings = JSON.parse(jenkinsSettings);
-                this.views = parsedJenkinsSettings.views;
-            } else {
-                this.views = ['Sinistre@T_LAMARCHE', 'Contrats@T_LAMARCHE', 'Ged@T_LAMARCHE', 'Directives@T_LAMARCHE', 'Partenaires@T_LAMARCHE', 'Siveer@T_LAMARCHE', 'Framework@T_LAMARCHE'];
-            }
-
-            const promises = [];
-
-            this.views.forEach((view) => {
-                    let splitted = view.split('@');
-                    let viewName = splitted[0];
-                    let user = splitted[1];
-                    let build = {name: viewName, jobs: []};
-                    this.builds.push(build);
-                    promises.push(this.getLastBuilds(user, viewName)
-                        .then(
-                            (data) => {
-                                build.jobs = data.jobs;
-                                this.$forceUpdate();
-                            }
-                        ).catch((error) => {
-                        })
-                    );
-                }
-            );
-            this.builds.push({name: 'My Builds', jobs: []});
-            setTimeout(() => {
-                Promise.all(promises).then(() => {
-                    this.builds[this.builds.length - 1].jobs = [
-                        ...this.builds
-                            .map((build) => build.jobs)
-                            .reduce((a, b) => [...a, ...b], [])
-                            .filter((job) => job.infos)
-                            .filter((job) => job.infos.lastBuild)
-                            .filter((job) => job.infos.lastBuild.culprits)
-                            .filter((job) => job.infos.lastBuild.culprits[0])
-                            .filter((job) => this.isConnectedUser(job.infos.lastBuild.culprits[0].fullName))
-                    ];
-                    this.loading = false;
-                }).catch(() => this.loading = false);
-            }, 250);
+            JenkinsStore.initUser().then(() => {
+                JenkinsStore.initJenkins().then(() => this.loading = false).catch(() => this.loading = false);
+            });
         }
     }
 </script>

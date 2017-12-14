@@ -70,7 +70,7 @@ module.exports = {
                             );
                         });
                         Promise.all(promises).then(() => {
-                            if (savedBuilds) {
+                            if (savedBuilds && savedBuilds.$loki) {
                                 DeployDb.remove(DeployDb.getJenkins(), savedBuilds.$loki);
                             }
                             DeployDb.save(DeployDb.getJenkins(), build);
