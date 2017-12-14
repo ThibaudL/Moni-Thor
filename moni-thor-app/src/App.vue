@@ -182,6 +182,10 @@
     @import "~vue-material/dist/theme/all"; // Apply the theme
 </style>
 <style scoped>
+    .app .md-list.md-theme-default .md-list-item-container:not(.md-list-item-default):not([disabled]):hover{
+        color: white;
+    }
+
     .app .ok {
         color: cornflowerblue;
     }

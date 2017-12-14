@@ -1,6 +1,6 @@
 {
   "name": "moni-thor",
-  "version": "2.0.1-6",
+  "version": "2.0.1-7",
   "description": "Moni-Thor app, server and front",
   "main": "src/index.js",
   "bin": {

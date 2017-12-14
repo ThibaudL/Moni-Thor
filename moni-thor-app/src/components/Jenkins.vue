@@ -101,7 +101,6 @@
                     data: ''
                 },
                 loading: true,
-                ldapUser: '',
                 JenkinsStore : JenkinsStore
             }
         },
@@ -121,9 +120,6 @@
             twoDigits(time) {
                 return time < 10 ? '0' + time : time;
             },
-//            getExecutors() {
-//                return axios.get(`/ajaxExecutors`).then((response) => response.data);
-//            },
             getIcon(build) {
                 if (build.jobs.filter((job) => job.color.startsWith('red') || job.color.startsWith('yellow')).length > 0) {
                     return 'add_alert';
@@ -134,33 +130,12 @@
 
             },
             isConnectedUser(username) {
-                if (username && this.ldapUser) {
-                    return username.includes(this.ldapUser);
+                if (username && JenkinsStore.ldapUser) {
+                    return username.includes(JenkinsStore.ldapUser);
                 }
-            },
-            initWs(user) {
-                const BrowserWebSocket = require('browser-websocket');
-                const ws = new BrowserWebSocket('ws://mdpa-10984:9003', {
-                    rejectUnauthorized: false
-                });
-
-                ws.on('open', () => {
-                    ws.emit('register:' + user);
-                });
-
-                ws.on('message', (e) => {
-                    console.log(e);
-                });
             }
         },
         mounted() {
-            chrome.runtime.sendMessage('ohaiaamkoajhocfibmnlcnbjlgjmgaeh', {"getUser": 1},
-                (response) => {
-                    this.ldapUser = response.user;
-                    this.initWs(this.ldapUser);
-                }
-            );
-
             this.loading = true;
             JenkinsStore.initUser().then(() => {
                 JenkinsStore.initJenkins().then(() => this.loading = false).catch(() => this.loading = false);
