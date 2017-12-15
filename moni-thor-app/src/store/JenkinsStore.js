@@ -47,15 +47,38 @@ class JenkinsStore {
         });
 
         ws.on('message', (e) => {
-            console.log(e);
+            // console.log(e);
+            let view = JSON.parse(e.data);
+            let eqView = this.builds.find((v) => v.name === view.name && v.user === view.user);
+            if (eqView) {
+                eqView.jobs = view.jobs;
+            }
+            if (view.jobs
+                    .filter((job) => job.infos)
+                    .filter((job) => job.infos.lastBuild)
+                    .filter((job) => job.infos.lastBuild.culprits)
+                    .filter((job) => job.infos.lastBuild.culprits[0])
+                    .filter((job) => this.isConnectedUser(job.infos.lastBuild.culprits[0].fullName))) {
+                chrome.notifications.create(job.name, {
+                    title: 'Tu as fait planter le job : ' + job.name
+                });
+            }
         });
+    }
+
+    launchBuild(job) {
+        axios.post(job.url + 'build');
+        job.color = 'blue_anime';
     }
 
     isConnectedUser(user) {
         return user.includes(this.ldapUser);
     }
 
-    initJenkins() {
+    initJenkins(forceReload) {
+        if (this.builds && this.builds.length > 0 && !forceReload) {
+            return new Promise((resolve) => resolve(this.builds));
+        }
         this.builds = [];
         let jenkinsSettings = window.localStorage.getItem('jenkinsSettingsV2');
         if (jenkinsSettings) {
@@ -76,6 +99,7 @@ class JenkinsStore {
                 promises.push(this.getLastBuilds(user, viewName)
                     .then(
                         (data) => {
+                            build.user = data.user;
                             build.jobs = data.jobs;
                             this.$forceUpdate();
                         }

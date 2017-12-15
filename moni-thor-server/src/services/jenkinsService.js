@@ -1,18 +1,22 @@
 const LOGGER = require('../utils/logger');
 const fetch = require('node-fetch');
 const jenkins = require('../../secret/jenkins');
+const WebSocket = require('ws');
 
 const connectedUsers = [];
 
 function getViewData(user,viewName, DeployDb) {
+    LOGGER.debug('GetViewData', user,viewName);
     let promises = [];
     return fetch(`${jenkins.url}/user/${user}/my-views/view/${encodeURIComponent(viewName)}/api/json`)
         .then(response => response.json())
         .then((view) => {
+            view.user = user;
             let savedBuilds = DeployDb.getJenkins().data
-                .find(b => b.name === view.name);
+                .find(b => b.name === view.name && b.user === view.user);
+            console.log(!!savedBuilds);
             view.jobs.forEach((job) => {
-                promises.push(fetch(job.url + '/api/json')
+                promises.push(fetch(job.url + 'api/json')
                     .then((response) => response.json())
                     .then((infos) => {
                         job.infos = infos;
@@ -21,23 +25,21 @@ function getViewData(user,viewName, DeployDb) {
                             lastBuildForJob = savedBuilds.jobs
                                 .find(
                                     (j) => {
-                                        return j && j.infos && j.infos.lastBuild && j.infos.lastBuild.number === job.infos.lastBuild.number
+                                        return j && j.infos && j.infos.lastBuild && j.infos.lastBuild.number === job.infos.lastBuild.number && j.color === job.color
                                     }
                                 );
                         }
                         if (!lastBuildForJob && infos) {
                             let promisesInfos = [];
-                            promisesInfos.push(fetch(infos.lastBuild.url + '/api/json')
+                            promisesInfos.push(fetch(infos.lastBuild.url + 'api/json')
                                 .then((response) => response.json())
                                 .then((lastBuild) => {
                                     view.hasChanged = true;
                                     job.infos.lastBuild = lastBuild;
                                     return job;
-                                }).catch(() => {
-                                    console.log("Pas de lastBuild pour : ", job.name)
                                 })
                             );
-                            promisesInfos.push(fetch(infos.lastBuild.url + '/mavenArtifacts/api/json')
+                            promisesInfos.push(fetch(infos.lastBuild.url + 'mavenArtifacts/api/json')
                                 .then((response) => response.json())
                                 .then((mavenInfos) => {
                                     view.hasChanged = true;
@@ -45,7 +47,8 @@ function getViewData(user,viewName, DeployDb) {
                                     return job;
                                 })
                                 .catch(() => {
-                                    console.log("Pas de mavenArtifact pour : ", job.name)
+                                    console.log('build maven introuvable pour :',infos.lastBuild.url)
+                                    return job;
                                 })
                             );
                             return Promise.all(promisesInfos);
@@ -53,17 +56,17 @@ function getViewData(user,viewName, DeployDb) {
                             job.infos = lastBuildForJob.infos;
                         }
                     })
-                    .catch((e) => {
-                        console.log("Pas d'infos pour : ", job.name, e)
-                    })
                 );
             });
             return Promise.all(promises).then(() => {
                 if (savedBuilds && savedBuilds.$loki) {
+                    console.log('remove', savedBuilds.$loki);
                     DeployDb.remove(DeployDb.getJenkins(), savedBuilds.$loki);
                 }
                 DeployDb.save(DeployDb.getJenkins(), view);
                 return view;
+            }).catch((e) => {
+                console.error('une erreur c\'est produite',e);
             })
         });
 }
@@ -80,6 +83,7 @@ module.exports = {
         });
 
         wsServer.broadcast = (view) => {
+            console.log("Broadcasting",view);
             wsServer.clients.forEach((client) => {
                 if (client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify(view));
@@ -88,17 +92,19 @@ module.exports = {
         };
 
         setInterval(() => {
+            console.log('time to check builds');
             DeployDb.getJenkins().data
                 .forEach((view) => {
-                    getViewData(view.name,view.user,DeployDb)
+                    getViewData(view.user,view.name,DeployDb)
                         .then((v) => {
                             if(v.hasChanged){
+                                console.log('Has changed :',view.name);
                                 wsServer.broadcast(v);
                             }
                         })
                 });
 
-        },60000);
+        },10000);
 
 
         LOGGER.info('registered : jenkins service');

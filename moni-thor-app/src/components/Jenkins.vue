@@ -46,6 +46,8 @@
                                                :href="getConsoletUrl(job)">
                                                 <i class="material-icons">video_label</i>
                                             </a>
+                                            <i class="material-icons" v-if="!job.color.includes('anime')" style="color: #88c342;cursor:pointer;" title="Launch build"
+                                            v-on:click="launchBuild(job)">play_circle_filled</i>
                                     </span>
                                     <span>
                                         <a target="_blank" :href="job.url">{{job.name}}</a>
@@ -124,6 +126,9 @@
                 if (build.jobs.filter((job) => job.color.startsWith('red') || job.color.startsWith('yellow')).length > 0) {
                     return 'add_alert';
                 }
+                if(build.jobs.filter((job) => job.color.includes('anime')).length > 0){
+                    return 'refresh';
+                }
                 return 'done';
             },
             initView(id) {
@@ -133,6 +138,9 @@
                 if (username && JenkinsStore.ldapUser) {
                     return username.includes(JenkinsStore.ldapUser);
                 }
+            },
+            launchBuild(job){
+                this.JenkinsStore.launchBuild(job);
             }
         },
         mounted() {
@@ -170,7 +178,7 @@
 
     .jenkins span.state.red_anime > i,
     .jenkins span.state.yellow_anime > i,
-    .jenkins span.state.blue_anime > i {
+    .jenkins span.state.blue_anime > i{
         /*background-image: -webkit-radial-gradient(20px 20px, circle cover, white, cornflowerblue);*/
         animation-name: spin;
         animation-duration: 3s; /* 3 seconds */
