@@ -1,14 +1,26 @@
 <template>
     <div class="page-container app md-theme-default">
         <md-app>
-            <md-app-toolbar style="height: 65px;  display: flex;    flex-direction: row-reverse;">
-                <h2>Utilisateur : {{JenkinsStore.ldapUser}}</h2>
-            </md-app-toolbar>
-            <md-app-drawer md-permanent="full" style="position: fixed;color : white;">
-                <div style="text-align: center">
-                    <img class="logo" src="./assets/hammer3.png">
-                    <h1>Moni-Thor</h1>
+            <md-app-toolbar class="md-disabled">
+                <md-button class="md-icon-button" @click="toggleMenu" v-if="!menuVisible">
+                    <md-icon>menu</md-icon>
+                </md-button>
+                <div class="md-toolbar-section-end">
+                    <h4>Utilisateur : {{JenkinsStore.ldapUser}}</h4>
                 </div>
+            </md-app-toolbar>
+            <md-app-drawer :md-active.sync="menuVisible" md-persistent="full">
+                <md-toolbar class="md-transparent" md-elevation="0">
+                    <div class="md-title">
+                        <img class="logo" src="./assets/thor-hammer-logo.png" width="80">
+                        <h3>Moni-Thor</h3>
+                    </div>
+                    <div class="md-toolbar-section-end">
+                        <md-button class="md-icon-button md-dense" @click="toggleMenu">
+                            <md-icon>keyboard_arrow_left</md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
                 <md-list>
                     <md-list-item v-on:click="go('/')" v-bind:class="{ 'active': isRoute('home') }">
                         <md-icon>home</md-icon>
@@ -63,13 +75,9 @@
                     </md-list-item>
                 </md-list>
             </md-app-drawer>
-            <md-app-content style="min-height: calc(-65px + 100vh);margin-left: 230px;">
+            <md-app-content>
                 <div>
                     <router-view></router-view>
-                    <!--<md-bottom-bar >-->
-                    <!--<md-bottom-bar-item md-icon-src="/static/hammer.png">-->
-                    <!--</md-bottom-bar-item>-->
-                    <!--</md-bottom-bar>-->
                 </div>
             </md-app-content>
         </md-app>
@@ -83,7 +91,8 @@
         name: 'app',
         data() {
             return {
-                JenkinsStore: JenkinsStore
+                JenkinsStore: JenkinsStore,
+                menuVisible: true
             }
         },
         methods: {
@@ -99,6 +108,9 @@
                     let building = JenkinsStore.builds[JenkinsStore.builds.length - 1].jobs.filter((job) => job.color.includes('anime'));
                     return bad.length > 0 ? 'bad' : (building.length > 0 ? 'building' : 'ok');
                 }
+            },
+            toggleMenu () {
+                this.menuVisible = !this.menuVisible
             }
         },
         mounted() {
@@ -108,68 +120,6 @@
         }
     }
 </script>
-
-<style lang="scss">
-    @import "~vue-material/dist/theme/engine"; // Import the theme engine
-
-    @include md-register-theme("default", (
-            primary: md-get-palette-color(blue, A200), // The primary color of your application
-            accent: md-get-palette-color(red, A200) // The accent or secondary color
-    ));
-
-    @import "~vue-material/dist/theme/all"; // Apply the theme
-</style>
-
-<style>
-    #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin: 15px;
-    }
-
-    .md-app {
-    }
-
-    .md-whiteframe {
-        background-color: #f7f7f7;
-        padding: 15px;
-    }
-
-    .md-drawer {
-        width: 230px;
-        max-width: calc(100vw - 125px);
-    }
-
-    .md-app-drawer .md-list-item,
-    .md-app-drawer .md-list md-theme-default,
-    .app .md-drawer.md-theme-default {
-        background-color: #3c4e59;
-    }
-
-    .md-app-drawer .md-list-item.active {
-        background-color: #be5065;
-    }
-
-    .md-app-drawer .md-list.md-theme-default .md-list-item-container,
-    .md-app-drawer .md-icon.md-theme-default.md-icon-font {
-        color: white;
-    }
-
-    .app .md-drawer.md-permanent-full .md-list {
-        padding-bottom: 1px;
-    }
-
-    .app .logo {
-        width: 65px;
-        -webkit-transform: rotate(36deg);
-        transform: rotate(57deg);
-        margin-left: -110px;
-    }
-
-</style>
 <style lang="scss">
     @import "~vue-material/dist/theme/engine"; // Import the theme engine
 
@@ -180,6 +130,7 @@
     ));
 
     @import "~vue-material/dist/theme/all"; // Apply the theme
+    @import "./assets/styles"; // Specific style
 </style>
 <style scoped>
     .app .md-list.md-theme-default .md-list-item-container:not(.md-list-item-default):not([disabled]):hover{
@@ -195,7 +146,6 @@
     }
 
     .app .building > i {
-        /*background-image: -webkit-radial-gradient(20px 20px, circle cover, white, cornflowerblue);*/
         animation-name: spin;
         animation-duration: 3s; /* 3 seconds */
         animation-iteration-count: infinite;
