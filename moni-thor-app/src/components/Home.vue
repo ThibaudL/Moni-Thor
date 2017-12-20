@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <md-app-toolbar class=" md-toolbar" style="height: 50px;">
+        <md-app-toolbar class=" md-toolbar md-primary" md-elevation="0">
             <span>
                 <h2>Home</h2>
             </span>

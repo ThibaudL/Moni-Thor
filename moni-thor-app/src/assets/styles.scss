@@ -1,0 +1,73 @@
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin: 15px;
+}
+
+.app {
+  .md-drawer {
+    color: #FFF;
+    width: 300px;
+    max-width: calc(100vw - 125px);
+    background-color: #3c4e59;
+    &.md-persistent-full {
+      .md-list {
+        padding: 0;
+      }
+    }
+    .md-toolbar {
+      margin-bottom: 15px;
+      .md-title {
+        display: flex;
+        color: #FFF;
+        h3 {
+          padding-left: 5px;
+          align-self: flex-end;
+        }
+      }
+      &.md-theme-default {
+        .md-icon {
+          color: #FFF;
+        }
+      }
+    }
+    .md-list {
+      .md-list-item {
+        background-color: #3c4e59;
+        &.active {
+          background-color: #be5065;
+        }
+        .md-list-item-container {
+          border: none;
+          .md-list-item-content {
+            color: #FFF;
+            .md-icon {
+              color: #FFF;
+            }
+            .md-icon-image {
+              svg {
+                fill: #FFF;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .md-app-container {
+    min-height: 100vh;
+    .md-app-toolbar {
+      &.md-disabled {
+        background: #f4f4f4;
+        color: #777;
+        border-bottom: 1px solid #bdbdbd;
+      }
+      .md-icon {
+        color: #777;
+      }
+    }
+  }
+}
